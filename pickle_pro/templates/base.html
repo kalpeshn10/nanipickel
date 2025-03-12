@@ -38,12 +38,12 @@
                     Shop by Ingredients
                 </a>
                 <ul class="dropdown-menu subul" aria-labelledby="ingredientsDropdown">
-                    <li><a class="dropdown-item" href="mango.html">Mango</a></li>
-                    <li><a class="dropdown-item" href="Lemon.html">Lemon</a></li>
-                    <li><a class="dropdown-item" href="Mixed.html">Mixed</a></li>
-                    <li><a class="dropdown-item" href="Panjabi.html">Panjabi</a></li>
-                    <li><a class="dropdown-item" href="kerda.html">kerda </a></li>
-                    <li><a class="dropdown-item" href="Carrot.html">Carrot</a></li>
+                    <li><a class="dropdown-item" href="{% url 'mango' %}">Mango</a></li>
+                    <li><a class="dropdown-item" href="{% url 'Lemon' %}">Lemon</a></li>
+                    <li><a class="dropdown-item" href="{% url 'Mixed' %}">Mixed</a></li>
+                    <li><a class="dropdown-item" href="{% url 'Panjabi' %}">Panjabi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'kerda' %}">kerda </a></li>
+                    <li><a class="dropdown-item" href="{% url 'Carrot' %}">Carrot</a></li>
                 </ul>
               </li>
               <li class="nav-item dropdown">
@@ -52,8 +52,8 @@
                     Shop by Taste
                 </a>
                 <ul class="dropdown-menu subul" aria-labelledby="tasteDropdown">
-                  <li><a class="dropdown-item" href="spicy.html">Spicy</a></li>
-                  <li><a class="dropdown-item" href="sweet.html">Sweet</a></li>
+                  <li><a class="dropdown-item" href="{% url 'spicy' %}">Spicy</a></li>
+                  <li><a class="dropdown-item" href="{% url 'sweet' %}">Sweet</a></li>
                 </ul>
              </li>
               <li class="nav-item dropdown">
@@ -62,13 +62,13 @@
                   Our Story
               </a>
               <ul class="dropdown-menu subul" aria-labelledby="storyDropdown">
-                  <li><a class="dropdown-item" href="#">How We</a></li>
-                  <li><a class="dropdown-item" href="#">Make Our</a></li>
-                  <li><a class="dropdown-item" href="#">Products</a></li>
+                  <li><a class="dropdown-item" href="{% url 'howwe' %}">How We</a></li>
+                  <li><a class="dropdown-item" href="{% url 'makeour' %}">Make Our</a></li>
+                  <li><a class="dropdown-item" href="{% url 'products' %}">Products</a></li>
               </ul>
               </li>
-              <li class="nav-item"><a class="nav-link" href="blogs.html">blogs</a></li>
-              <li class="nav-item"><a class="nav-link" href="Contact.html">Contact</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'blogs' %}">blogs</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'Contact' %}">Contact</a></li>
             </ul>
               <div class="search-container">
                   <input type="text" class="form-control search-input" placeholder="Search our store">
@@ -116,8 +116,8 @@
                   <button type="submit" class="btn" style="background-color: #de941e;">Sign In</button>
               </div>
               <div class="text-center mt-3">
-                  <a href="createaccount.html" class="d-block">Create account</a>
-                  <a href="forgetpassword.html" class="d-block">Forgot your password?</a>
+                  <a href="{% url 'createaccount' %}" class="d-block">Create account</a>
+                  {% comment %} <a href="{% url 'forgetpassword' %}" class="d-block">Forgot your password?</a> {% endcomment %}
               </div>
           </form>
       </div>
