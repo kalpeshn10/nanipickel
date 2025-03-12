@@ -57,6 +57,9 @@ h1, h2, h3, h4, h5, h6{
     padding: 0px;
     margin-bottom: 3px;
 }
+.mynav ul .nav-item{
+	margin-top: 0px !important;
+}
 
 .mymenu .mynav>ul>li{
 	margin-left: 5px;
@@ -610,3 +613,34 @@ footer table thead tr th,td{
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.quantity-selector {
+	display: flex;
+	align-items: center;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	overflow: hidden;
+	max-width: 107px;
+	background: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.quantity-selector button {
+	background: #f8a100;
+	border: none;
+	padding: 8px 12px;
+	color: white;
+	font-size: 18px;
+	cursor: pointer;
+	transition: background 0.3s;
+}
+/* .quantity-selector button:hover { background: #d88c00; } */
+.quantity-selector input {
+	width: 40px;
+	text-align: center;
+	border: none;
+	outline: none;
+	font-size: 16px;
+	font-weight: bold;
+	background: transparent;
+	margin-right: -5px;
+	
+}
