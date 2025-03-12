@@ -339,6 +339,24 @@
         function placeOrder() {
           window.location.href = "order.html";
         }
+
+      function sendOTP() {
+        alert("OTP has been sent to your email!");
+      }
+      
+      document.getElementById("signup-form").addEventListener("submit", function(event) {
+          event.preventDefault();
+          alert("Account created successfully!");
+      });
+      
+      function sendOTP() {
+        alert("OTP has been sent to your email!");
+    }
+    
+    document.getElementById("forgot-password-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        alert("Your password has been reset successfully!");
+    });
   
   </script>
   </html>
