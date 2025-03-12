@@ -571,6 +571,31 @@ footer table thead tr th,td{
 	cursor: pointer;
 }
 
-/* .place-order:hover { 
-	background-color: #218838; 
-} */
+.card {
+	max-width: 400px;
+	margin: auto;
+	margin-top: 50px;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.otp{
+	background-color: #de941e !important;
+	border: none !important;
+}
+
+.account{
+	background-color: #de941e !important;
+}
+
+.fcard {
+	max-width: 400px;
+	margin: auto;
+	margin-top: 50px;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.reset{
+	background-color: #de941e;
+}

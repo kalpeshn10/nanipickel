@@ -116,8 +116,8 @@
                   <button type="submit" class="btn" style="background-color: #de941e;">Sign In</button>
               </div>
               <div class="text-center mt-3">
-                  <a href="#" class="d-block">Create account</a>
-                  <a href="#" class="d-block">Forgot your password?</a>
+                  <a href="createaccount.html" class="d-block">Create account</a>
+                  <a href="forgetpassword.html" class="d-block">Forgot your password?</a>
               </div>
           </form>
       </div>
@@ -339,6 +339,24 @@
         function placeOrder() {
           window.location.href = "order.html";
         }
+
+      function sendOTP() {
+        alert("OTP has been sent to your email!");
+      }
+      
+      document.getElementById("signup-form").addEventListener("submit", function(event) {
+          event.preventDefault();
+          alert("Account created successfully!");
+      });
+      
+      function sendOTP() {
+        alert("OTP has been sent to your email!");
+    }
+    
+    document.getElementById("forgot-password-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        alert("Your password has been reset successfully!");
+    });
   
   </script>
   </html>
