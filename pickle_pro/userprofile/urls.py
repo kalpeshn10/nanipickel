@@ -17,6 +17,5 @@ urlpatterns = [
     path('blogs/',blogs,name='blogs'),
     path('Contact/',Contact,name='Contact'),
     path('createaccount/',createaccount,name='createaccount'),
-    # path('forgetpassword/',forgetpassword,name='forgetpassword'),
-    
+
 ]

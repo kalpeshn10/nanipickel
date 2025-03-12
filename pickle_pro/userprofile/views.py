@@ -4,6 +4,8 @@ from django.shortcuts import render
 def home(request):
     return render(request,'home.html')
 
+
+
 def mango(request):
     return render(request,'mango.html')
 
@@ -45,7 +47,4 @@ def Contact(request):
 
 def createaccount(request):
     return render(request,'createaccount.html')
-
-def home(request):
-    return render(request,'home.html')
 
