@@ -48,3 +48,5 @@ def Contact(request):
 def createaccount(request):
     return render(request,'createaccount.html')
 
+def password(request):
+    return render(request,'password.html')
