@@ -7,7 +7,9 @@
 	--clr-purple: #d94545c7;
 	--clr-pink: #de941e;
 }
-
+.co{
+	background-color: #ffffff !important;
+}
 .darkpurple{
 	color: var(--clr-darkpurple);
 }
@@ -50,6 +52,11 @@ h1, h2, h3, h4, h5, h6{
 	box-shadow: 0px 1px 7px #000;
     padding: 0px;
     margin-bottom: 3px;
+}
+
+.bg-body-tertiary {
+    --bs-bg-opacity: 1;
+    background-color: #FFF0F6 !important;
 }
 
 .mymenu{
