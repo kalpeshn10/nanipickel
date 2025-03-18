@@ -196,7 +196,7 @@
       </div>  
 
       <div class="col-lg-5 col-md-12 text-center mt-4 foot">
-        <img src="images/logo.jpeg" class="hvr-pulse-grow rounded" width="120px">
+        <img src="{% static 'assets/images/logo2.png'%}" class="hvr-pulse-grow rounded" width="120px">
         <p class="mt-3 mb-3"><b>FOLLOW US FOR FARMDIDI</b></p>
         <ul class="list-inline">
           <li class="list-inline-item"><a href="#" class="hvr-pulse-grow"><i class="rounded fa-brands fa-facebook"></i></a></li>
@@ -341,10 +341,6 @@ let totalPrice = 0;
         window.location.href = "order.html";
       }
 
-      document.getElementById("signup-form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        alert("Account created successfully!");
-    });
       let cart = [];
        
         document.querySelectorAll(".size-option").forEach(option => {
