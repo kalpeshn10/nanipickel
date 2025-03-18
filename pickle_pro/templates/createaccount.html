@@ -2,28 +2,52 @@
 {% block main-content %}
 {% load static %}
 
-<!-- create account start -->
-<div class="container mb-5">
-    <div class="card">
-        <h3 class="text-center">Create Account</h3>
-        <form id="signup-form">
-            <div class="mb-3">
-                <label for="fullname" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="fullname" required>
+<div class="container p-4 bg-white shadow rounded mt-5 mb-5" style="max-width: 350px;">
+    <h2 class="text-center mb-3">Sign Up</h2>
+    <form onsubmit="handleSignup(event);">
+        <div class="mb-3">
+            <label class="form-label">Username:</label>
+            <input type="text" id="username" class="form-control" placeholder="Choose a username" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mobile Number:</label>
+            <input type="text" id="mobile" class="form-control" placeholder="Enter your mobile number" required>
+        </div>
+        <div id="signup-error" class="text-danger text-center mb-3"></div>
+
+
+        <div class="mb-3">
+            <label class="form-label">Password:</label>
+            <input type="password" id="password" class="form-control" placeholder="Enter password" required>
+        </div>
+
+
+        <button type="submit" class="btn btn-warning w-100">Sign Up</button>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signupModalLabel">Sign Up Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required>
+            <div class="modal-body">
+                Congratulations! Your account has been created successfully.
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" required>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="redirectToLogin()">Go to Login</button>
             </div>
-            <button type="submit" class="btn account w-100">Create Account</button>
-        </form>
+        </div>
     </div>
 </div>
- <!-- create account end -->
-  
+
 {% endblock main-content %}
-    
