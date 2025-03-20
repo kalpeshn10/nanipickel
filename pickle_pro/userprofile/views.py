@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
+from .models import *
 from django.contrib import messages
 
 def home(request):
@@ -46,16 +46,16 @@ def Contact(request):
 
 def createaccount(request):
     if request.method == 'POST':
-        user_name = request.POST['user_name']
+        full_name = request.POST['full_name']
         email = request.POST['email']
         phone_number = request.POST['phone_number']
         password = request.POST['password']
-        
-        if User.objects.filter(user_name=user_name) or User.objects.filter(email=email):
-            messages.error(request,'User Already exists')
+         
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request,'This email Already exists')
             return render(request,'createaccount.html')
         
-        created = User.objects.create(user_name=user_name,email=email,phone_number=phone_number)
+        created = CustomUser.objects.create(full_name=full_name,email=email,phone_number=phone_number)
         created.set_password(password)
         created.save()
         messages.success(request,'Account created Successfully..')
