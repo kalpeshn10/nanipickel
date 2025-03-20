@@ -418,35 +418,42 @@ let totalPrice = 0;
            updateCart();
        }
 
-       function handleSignup(event) {
-        event.preventDefault();
-        
-      // Perform your sign-up logic here (e.g., form validation, AJAX request, etc.)
+      //  function handleSignup(event) {
+      //   var mobile = document.getElementById("mobile").value;
+      //   var mobileRegex = /^[0-9]{10}$/;
 
-      var username = document.getElementById("username").value;
-        var email = document.getElementById("email").value;
+      //   if (!mobileRegex.test(mobile)) {
+      //       document.getElementById("signup-error").innerText = "Invalid mobile number!";
+      //       event.preventDefault();  // Prevent form submission only if validation fails
+      //   } else {
+      //       document.getElementById("signup-error").innerText = "";
+      //   }
+      //   // Assuming the sign-up is successful, show the login sidebar
+      //   let offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
+      //       offcanvas.show();
+            
+      //       // Optionally, you can show a success message or redirect the user
+      //       alert("Sign-up successful! Please log in.");
+
+
+      // }
+    function handleSignup(event) {
         var mobile = document.getElementById("mobile").value;
-        var password = document.getElementById("password").value;
-
         var mobileRegex = /^[0-9]{10}$/;
-        if (!mobileRegex.test(mobile)) {
-          document.getElementById("signup-error").innerText = "Invalid mobile number!";
-          return false;
-        }
-        
-      document.getElementById("signup-error").innerText = "";
 
+        if (!mobileRegex.test(mobile)) {
+            document.getElementById("signup-error").innerText = "Invalid mobile number!";
+            event.preventDefault();  // Prevent form submission only if validation fails
+        } else {
+            document.getElementById("signup-error").innerText = "";
+        }
         // Assuming the sign-up is successful, show the login sidebar
         let offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
-        offcanvas.show();
+            offcanvas.show();
+            
+            // Optionally, you can show a success message or redirect the user
+            alert("Sign-up successful! Please log in.");
 
-        // Optionally, you can show a success message or redirect the user
-        alert("Sign-up successful! Please log in.");
-    }
-
-  
- 
-
-
+      }
 </script>
 </html>

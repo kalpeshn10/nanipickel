@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-
+import ipdb
 def home(request):
     return render(request,'home.html')
 
@@ -55,11 +55,11 @@ def createaccount(request):
             messages.error(request,'This email Already exists')
             return render(request,'createaccount.html')
         
-        created = CustomUser.objects.create(full_name=full_name,email=email,phone_number=phone_number)
+        created = CustomUser.objects.create(full_name=full_name,email=email, phone_number = phone_number)
         created.set_password(password)
         created.save()
         messages.success(request,'Account created Successfully..')
-        return render(request,"home.html")  
+        return redirect("home")  
     return render(request,'createaccount.html')
 
 def password(request):
