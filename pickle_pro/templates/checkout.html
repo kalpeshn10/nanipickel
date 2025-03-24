@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block main-content %}
+{% load static %}
+
+{% comment %} <div class="container-fluid about my-5 ">
+    <div class="container-1 mt-5">  
+        <div class="row justify-content-center mt-4">  
+            <div class="col-12 text-center">
+              <div class="heading">
+                  <h1>Billing Details</h1>
+                  <div class="head-sub">
+                      <h1>Billing Details</h1>
+                  </div>
+              </div>
+            </div>
+          </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="container-1 mt-5">
+        <form id="checkoutForm">
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" required>
+            </div>
+        </div>
+        <div class="container-1 mt-3">
+            <h5 class="mb-3">Payment Method</h5>
+            <div class="mb-2">
+                <div class="form-check mb-1">
+                <input type="radio" class="form-check-input" name="payment" id="cash-on-delivery" required>
+                <label class="form-check-label" for="cash-on-delivery">Cash on Delivery</label>
+                </div>
+                <div class="form-check">
+                <input type="radio" class="form-check-input" name="payment" id="cash-on-delivery" required>
+                <label class="form-check-label" for="cash-on-delivery">UPI payment</label>
+                </div>
+            </div>
+            </div>
+        </div>  
+        <div class="col-md-6">
+            
+            <div class="container-1 mt-5">
+            <h5 class="mb-3">Order Summary</h5>
+            <ul class="list-group mb-3" id="cartItems">
+                <!-- Cart items will be inserted here dynamically -->
+            </ul>
+            </div>
+            </div>
+            <div class=" mt-2">
+            <div class="d-grid">
+                <button type="submit" class="btn checkout">Place Order</button>
+            </div>
+            </div>
+        </form>
+        </div>
+    </div>
+</div> {% endcomment %}
+<div class="container checkout-container py-5">
+    <div class="row justify-content-center mt-4 mb-5">  
+        <div class="col-12 text-center bil">
+          <div class="heading">
+              <h1>Checkout</h1>
+              <div class="head-sub">
+                  <h1>Checkout</h1>
+              </div>
+          </div>
+        </div>
+      </div>
+    <div class="row g-4">
+        <div class="col-md-7">
+            <div class="checkout-form">
+            <h4 class="text-center mb-3">Billing Details</h4>
+            <div class="container-1 mt-1">
+                <h4>Contact</h4>
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control mb-3" placeholder="Email">
+                
+                <h4>Delivery</h4>
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Full Name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" placeholder="Address" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" id="name" placeholder="City" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="name"  placeholder="Phone" required>
+                </div>
+                </div>
+                
+                <div class="container-1 mt-3">
+                    <h5 class="mb-3">Payment Method</h5>
+                    <div class="mb-2">
+                        <div class="form-check mb-1">
+                        <input type="radio" class="form-check-input" name="payment" id="cash-on-delivery" required>
+                        <label class="form-check-label" for="cash-on-delivery">Cash on Delivery</label>
+                        </div>
+                        <div class="form-check">
+                        <input type="radio" class="form-check-input" name="payment" id="cash-on-delivery" required>
+                        <label class="form-check-label" for="cash-on-delivery">UPI payment</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" mt-2">
+                    <div class="d-grid">
+                        <button type="submit" class="btn checkout">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="cart-summary">
+                <h4 class="text-center mb-3">Order Summary</h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Shrimp Salt (150 GMS)</span>
+                        <span>&#8377;140</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Combo of 3 Non-Veg Pickle</span>
+                        <span>&#8377;1,699</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Guntur Red Chili Powder (150 GMS)</span>
+                        <span>&#8377;170</span>
+                    </li>
+                </ul>
+                <h6>Total: <strong>&#8377;5,808</strong></h6>
+            </div>
+        </div>
+    </div>
+</div>
+  
+<!-- Checkout End -->
+ 
+{% endblock main-content %}

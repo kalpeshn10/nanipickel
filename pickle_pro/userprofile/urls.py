@@ -17,6 +17,10 @@ urlpatterns = [
     path('blogs/',blogs,name='blogs'),
     path('Contact/',Contact,name='Contact'),
     path('createaccount/',createaccount,name='createaccount'),
+    path('checkout/',checkout,name='checkout'),
     path('password/',password,name='password'),
-
+    path('login',login,name='login'),
+    path('product_detail/<int:id>', product_detail, name='product_detail'),
+    # path('home/add/<int:product_id>/', add_to_cart, name='add_to_cart'),
+    # path('home/remove/<int:item>/', remove_from_cart, name='remove_from_cart')
 ]
