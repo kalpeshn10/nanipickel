@@ -57,6 +57,7 @@
       </div>
   </div>
   <div class="row mb-5">
+    {% for i in products %}
     <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
       <div class="card p-2 text-center">
           <img src="{% static 'assets/images/h1.jpeg'%}" class="w-100 wid product-image">
@@ -71,7 +72,7 @@
                   <li><a class="dropdown-item size-option" href="#" data-price="599" data-size="500g">500g - Rs 599</a></li>
                   <li><a class="dropdown-item size-option" href="#" data-price="999" data-size="1Kg">1Kg - Rs 999</a></li>
               </ul>
-              <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
+              <button class="cart-btn add-to-cart hvr-glow cart"><a href="{% url 'add_to_cart' i.id %}">Add to Cart</a></button>
           </div>
       </div>
     </div>
@@ -90,7 +91,7 @@
                   <li><a class="dropdown-item size-option" href="#" data-price="599" data-size="500g">500g - Rs 599</a></li>
                   <li><a class="dropdown-item size-option" href="#" data-price="999" data-size="1Kg">1Kg - Rs 999</a></li>
               </ul>
-              <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
+              <button class="cart-btn add-to-cart hvr-glow cart"><a href="{% url 'add_to_cart' i.id %}">Add to Cart</a></button>
           </div>
       </div>
     </div>
@@ -109,10 +110,11 @@
                   <li><a class="dropdown-item size-option" href="#" data-price="599" data-size="500g">500g - Rs 599</a></li>
                   <li><a class="dropdown-item size-option" href="#" data-price="999" data-size="1Kg">1Kg - Rs 999</a></li>
               </ul>
-              <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
+              <button class="cart-btn add-to-cart hvr-glow cart"><a href="{% url 'add_to_cart' i.id %}">Add to Cart</a></button>
           </div>
       </div>
     </div>
+    {% endfor %}
  </div>
 
     <div class="row mt-5">

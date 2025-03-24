@@ -33,5 +33,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
+    
+class Category(models.Model):
+    Category_name = models.CharField(max_length =20)
 
+class Product(models.Model):
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
+    product_name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='static/assets/images')
+
+# class Cart(models.Model):
+#     user=models.ForeignKey(CustomUser ,on_delete=models.CASCADE,null=True,blank=True)
+# class CartItem(models.Model):
+#     cart = models.ForeignKey(Cart, related_name='items',on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product,on_delete=models.CASCADE) 
+#     quantity = models.PositiveBigIntegerField(default=1)
+
+#     def total_price(self):
+#         return self.quantity * self.product.price 
     
