@@ -81,13 +81,14 @@
                   </button>
               </div>
             {% if request.user.is_authenticated %}
+            {% csrf_token %}
             <button id="logoutBtn" class="btn ma ab btn-hover-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Logout">
-              <i class="bi bi-box-arrow-right"></i>
+              <a href={% url 'logout' %}><i class="bi bi-box-arrow-right"></i></a>
             </button>
             <div class="item rounded">
               <div class="col my-3 position-relative">
-               <button class="btn icon-button ma ab" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas">
-                 <i class="fas fa-shopping-cart"></i> 
+                <button class="btn icon-button ma ab" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas">
+                  <i class="fas fa-shopping-cart"></i>
                 </button>
                 <div class="position-absolute text-dec">
                     <span id="cartCount" class="cart-count d-none badge text-bg-danger text-dec rounded">0</span>
@@ -96,7 +97,7 @@
             </div>
             {% else %}
             <button class="icon-button ab" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
-              <i class="bi bi-person-fill"></i>
+              <a href={% url 'login' %}><i class="bi bi-person-fill"></i></a>
             </button>
             <div class="item rounded">
               <div class="col my-3 position-relative">
@@ -414,66 +415,7 @@ let totalPrice = 0;
        event.preventDefault();
        alert("Account created successfully!");
    });
-     let cart = [];
-      
-       document.querySelectorAll(".size-option").forEach(option => {
-           option.addEventListener("click", function() {
-               let btn = this.closest(".dropdown").querySelector(".selected-price");
-               btn.innerText = `${this.dataset.size} - Rs ${this.dataset.price}`;
-               btn.dataset.price = this.dataset.price;
-               btn.dataset.size = this.dataset.size;
-           });
-       });
-
-       
-       document.querySelectorAll(".add-to-cart").forEach(button => {
-           button.addEventListener("click", function() {
-               let card = this.closest(".card");
-               let name = card.querySelector(".product-name").innerText;
-               let sizeEl = card.querySelector(".selected-price");
-               let price = parseInt(sizeEl.dataset.price);
-               let size = sizeEl.dataset.size;
-               let imageSrc = card.querySelector(".product-image").src;
-               
-               let item = cart.find(i => i.name === name && i.size === size);
-               if (item) {
-                   item.quantity++;
-               } else {
-                   cart.push({ name, price, size, quantity: 1, imageSrc });
-               }
-               updateCart();
-               new bootstrap.Offcanvas(document.getElementById('cartCanvas')).show();
-           });
-       });
-
-       function updateCart() {
-         let cartList = document.getElementById("cartItems");
-         let total = 0;
-         let cartCount = document.getElementById("cartCount");
-         cartList.innerHTML = "";
-         cart.forEach((item, index) => {
-             let itemTotal = item.price * item.quantity;
-             total += itemTotal;
-             cartList.innerHTML += `
-                 <li class='list-group-item d-flex align-items-center justify-content-between'>
-                     <img src='${item.imageSrc}' class='cart-item-img me-2'>
-                     <div class='flex-grow-1'>
-                         ${item.name} (${item.size})
-                         <div class="quantity-selector mt-2">
-                             <button onclick="changeQuantity(${index}, -1)">&#128465;</button>
-                             <input type="number" value="${item.quantity}" min="1" readonly>
-                             <button onclick="changeQuantity(${index}, 1)">&#43;</button>
-                         </div>
-                     </div>
-                     <span>Rs ${itemTotal}</span>
-                 </li>`;
-         });
-
-         document.getElementById("totalPrice").innerText = total;
-         cartCount.innerText = cart.length;
-         cartCount.classList.toggle("d-none", cart.length === 0);
-     }
-
+     
        function changeQuantity(index, change) {
            let item = cart[index];
            if (change === -1 && item.quantity === 1) {
@@ -511,13 +453,21 @@ let totalPrice = 0;
       var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl);
       });
-    });
-
-    document.getElementById("logoutBtn").addEventListener("click", function () {
-      var confirmLogout = confirm("Are you sure you want to logout?");
-      if (confirmLogout) {
-        window.location.href = "home.html"; 
-    });
-
+  
+      document.getElementById("logoutBtn")?.addEventListener("click", function () {
+          var confirmLogout = confirm("Are you sure you want to logout?");
+          if (confirmLogout) {
+              window.location.href = "{% url 'logout' %}"; 
+          }
+      });
+  });
+  
+  $(document).on("click", ".size-option", function (e) {
+    e.preventDefault();
+    var price = $(this).data("price");
+    var size = $(this).data("size");
+    $(this).closest('.dropdown').find('.selected-price').text(size + " - Rs " + price);
+    $(this).closest('.dropdown').find('.selected-price').data("price", price);
+  });
 </script>
 </html>
