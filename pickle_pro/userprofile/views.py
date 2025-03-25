@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login as auth_login,logout
+from django.core.mail import send_mail
+from django.conf import settings
 from django.contrib.auth import logout
 import ipdb
 
@@ -108,3 +110,78 @@ def logout_view(request):
 def checkout(request):
     return render(request,'checkout.html')
 
+# def view_cart(request):
+#     user = request.user
+#     cart = Cart.objects.get(user=user)
+#     cart_items = cart.items.all()
+#     cart_count = cart_items.count()
+    
+#     context= {
+#         'cart': cart,
+#         'cart_items': cart_items,
+#         'cart_count': cart_count
+#     }
+#     return render(request,'cart.html',context)
+
+# def add_to_cart(request, product_id):
+#     user = request.user
+#     if not user.is_authenticated:
+#         messages.error(request, 'You must be logged in to add items to your cart.')
+#         return redirect('login')
+
+#     product = Product.objects.get(id=product_id)
+#     cart, created = Cart.objects.get_or_create(user= request.user)
+#     cart_item, created=CartItem.objects.get_or_create(cart=cart, product=product)
+
+    
+#     if not created:
+#         cart_item.quantity +=1
+
+#     cart_item.save()
+#     return redirect('view_cart')
+
+# def remove_from_cart(request, item_id):
+#     cart_item = get_object_or_404( CartItem, id=item_id, cart__user=request.user)
+#     cart_item.delete()
+#     return redirect('view_cart')
+
+def contact_view(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        if not name:
+            messages.error(request,'name is requred')
+            return render(request,'contact.html')
+        if not email:
+            messages.error(request,'Email is requried')
+            return render(request,'contact.html')
+
+        if contactUs.objects.filter(email = email).exists():
+            messages.error(request,'email alredy exists')
+            return render(request,'contact.html')
+        
+        created = contactUs.objects.create(name = name, email=email, subject= subject,message=message)
+        created.save()
+        send_mail(
+                subject = 'Thank you for contacting us',
+                message = 'Thankyou for reaching out to us. we will get back to you soon.',
+                from_email = settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+        )
+
+        send_mail(
+            subject=subject,
+            message= message,
+            from_email= settings.EMAIL_HOST_USER,
+            recipient_list=[settings.EMAIL_HOST_USER],
+            fail_silently= False
+        )
+
+        messages.success(request,'message sent successfully')
+        return render(request, 'contact.html')
+    
+    messages.success(request,'somthing went wrong')
+    return render(request, 'contact.html')

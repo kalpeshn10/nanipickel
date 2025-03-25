@@ -35,6 +35,32 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     
 
+class Category(models.Model):
+    Category_name = models.CharField(max_length =20)
+
+class Product(models.Model):
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
+    product_name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='static/assets/images')
+
+# class Cart(models.Model):
+#     user=models.ForeignKey(CustomUser ,on_delete=models.CASCADE,null=True,blank=True)
+# class CartItem(models.Model):
+#     cart = models.ForeignKey(Cart, related_name='items',on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product,on_delete=models.CASCADE) 
+#     quantity = models.PositiveBigIntegerField(default=1)
+
+#     def total_price(self):
+#         return self.quantity * self.product.price 
+    
+
+class contactUs(models.Model):
+    name = models.CharField(max_length=500,null=True,blank=True)
+    email = models.EmailField(max_length=500,null=True,blank=True)
+    subject = models.CharField(max_length=500,null=True,blank=True)
+    message = models.TextField(null=True,blank=True)
+
+
 # class MangoProduct(models.Model):
 #     product_name = models.CharField(max_length=50)
 #     image = models.ImageField(upload_to='static/assets/images')
@@ -115,5 +141,4 @@ class CarrotProduct(models.Model):
 
     def __str__(self):
         return self.name
- 
-   
+
