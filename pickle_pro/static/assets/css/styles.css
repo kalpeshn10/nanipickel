@@ -783,3 +783,45 @@ checkout-container {
 .pro {
 	font-size: 45px ;
 }
+
+ .contact{
+    background: white;
+     padding: 30px; 
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+	
+} 
+
+h2 {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+form input, form textarea {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+form button {
+    font-size: 18px;
+}
+
+.info {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+}
+
+.cont {
+	background-image: url('../images/');
+	background-size: cover;
+	background-position: center;
+	/* background-attachment: fixed; */
+	padding: 20px;
+	margin-top: 20px;
+	padding-top: 10px;
+} 

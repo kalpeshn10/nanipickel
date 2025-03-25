@@ -52,3 +52,9 @@ class Product(models.Model):
 #     def total_price(self):
 #         return self.quantity * self.product.price 
     
+
+class contactUs(models.Model):
+    name = models.CharField(max_length=500,null=True,blank=True)
+    email = models.EmailField(max_length=500,null=True,blank=True)
+    subject = models.CharField(max_length=500,null=True,blank=True)
+    message = models.TextField(null=True,blank=True)

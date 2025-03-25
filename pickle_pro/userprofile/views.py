@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login as auth_login,logout
+from django.core.mail import send_mail
+from django.conf import settings
 import ipdb
 
 def home(request):
@@ -149,3 +151,46 @@ def checkout(request):
 #     cart_item = get_object_or_404( CartItem, id=item_id, cart__user=request.user)
 #     cart_item.delete()
 #     return redirect('view_cart')
+
+def contact_view(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        if not name:
+            messages.error(request,'name is requred')
+            return render(request,'contact.html')
+        if not email:
+            messages.error(request,'Email is requried')
+            return render(request,'contact.html')
+
+        if contactUs.objects.filter(email = email).exists():
+            messages.error(request,'email alredy exists')
+            return render(request,'contact.html')
+        
+        created = contactUs.objects.create(name = name, email=email, subject= subject,message=message)
+        created.save()
+        send_mail(
+                subject = 'Thank you for contacting us',
+                message = 'Thankyou for reaching out to us. we will get back to you soon.',
+                from_email = settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+        )
+
+        send_mail(
+            subject=subject,
+            message= message,
+            from_email= settings.EMAIL_HOST_USER,
+            recipient_list=[settings.EMAIL_HOST_USER],
+            fail_silently= False
+        )
+
+        messages.success(request,'message sent successfully')
+        return render(request, 'contact.html')
+    
+    messages.success(request,'somthing went wrong')
+    return render(request, 'contact.html')
+
+ 
