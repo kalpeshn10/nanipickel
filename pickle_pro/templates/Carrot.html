@@ -18,10 +18,10 @@
         </div>
     </div>
     <div class="row mt-4">
-        {% for i in carrot_is %}
+        {% for i in mango_products %}
             <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
                 <div class="card p-2 text-center">
-                    <img src="{{ i.image.url }}" class="w-100 wid i-image">
+                    <img src="{{i.image.url}}" class="w-100 wid i-image">
                     <div class="dropdown mt-3">
                         <h4 class="i-name">{{ i.name }}</h4>
                         <h4>| {{ i.description }}</h4>
