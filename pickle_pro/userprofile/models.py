@@ -34,21 +34,86 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
     
-class Category(models.Model):
-    Category_name = models.CharField(max_length =20)
 
-class Product(models.Model):
-    category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
-    product_name = models.CharField(max_length=50)
-    image = models.ImageField(upload_to='static/assets/images')
+# class MangoProduct(models.Model):
+#     product_name = models.CharField(max_length=50)
+#     image = models.ImageField(upload_to='static/assets/images')
+#     price = models.IntegerField()
+#     count = models.IntegerField()
 
-# class Cart(models.Model):
-#     user=models.ForeignKey(CustomUser ,on_delete=models.CASCADE,null=True,blank=True)
-# class CartItem(models.Model):
-#     cart = models.ForeignKey(Cart, related_name='items',on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product,on_delete=models.CASCADE) 
-#     quantity = models.PositiveBigIntegerField(default=1)
+# class MangoProduct(models.Model):
+#     mango_name = models.CharField(max_length=50)
+#     image = models.ImageField(upload_to='static/assets/images') 
+#     price = models.IntegerField()
+#     count = models.IntegerField(default=0) 
 
-#     def total_price(self):
-#         return self.quantity * self.product.price 
+#     def __str__(self):
+#         return self.product_name 
+
+class MangoProduct(models.Model):
+    name = models.CharField(max_length=100)  
+    image = models.ImageField(upload_to='static/assets/images')  
+    price_250g = models.PositiveIntegerField() 
+    price_500g = models.PositiveIntegerField() 
+    price_1kg = models.PositiveIntegerField()  
+    description = models.TextField(blank=True)  
+
+    def __str__(self):
+        return self.name
     
+class LemonProduct(models.Model):
+    name = models.CharField(max_length=100)  
+    image = models.ImageField(upload_to='static/assets/images')  
+    price_250g = models.PositiveIntegerField() 
+    price_500g = models.PositiveIntegerField() 
+    price_1kg = models.PositiveIntegerField()  
+    description = models.TextField(blank=True)  
+
+    def __str__(self):
+        return self.name
+
+class MixedProduct(models.Model):
+    name = models.CharField(max_length=100)  
+    image = models.ImageField(upload_to='static/assets/images')  
+    price_250g = models.PositiveIntegerField() 
+    price_500g = models.PositiveIntegerField() 
+    price_1kg = models.PositiveIntegerField()  
+    description = models.TextField(blank=True)  
+
+    def __str__(self):
+        return self.name
+ 
+class PanjabiProduct(models.Model):
+    name = models.CharField(max_length=100)  
+    image = models.ImageField(upload_to='static/assets/images')  
+    price_250g = models.PositiveIntegerField() 
+    price_500g = models.PositiveIntegerField() 
+    price_1kg = models.PositiveIntegerField()  
+    description = models.TextField(blank=True)  
+
+    def __str__(self):
+        return self.name
+ 
+class KerdaProduct(models.Model):
+    name = models.CharField(max_length=100)  
+    image = models.ImageField(upload_to='static/assets/images')  
+    price_250g = models.PositiveIntegerField() 
+    price_500g = models.PositiveIntegerField() 
+    price_1kg = models.PositiveIntegerField()  
+    description = models.TextField(blank=True)  
+
+    def __str__(self):
+        return self.name
+
+class CarrotProduct(models.Model):
+    name = models.CharField(max_length=100)  
+    image = models.ImageField(upload_to='static/assets/images')  
+    price_250g = models.PositiveIntegerField() 
+    price_500g = models.PositiveIntegerField() 
+    price_1kg = models.PositiveIntegerField()  
+    description = models.TextField(blank=True)  
+
+    def __str__(self):
+        return self.name
+ 
+   
