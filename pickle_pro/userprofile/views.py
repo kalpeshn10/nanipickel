@@ -1,45 +1,38 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login as auth_login,logout
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth import logout
 import ipdb
 
 def home(request):
-    if request.method == 'GET':
-        queryset = Category.objects.all()
-        context ={
-            'queryset' : queryset,
-        }
-        return render(request,'home.html', context)
     return render(request,'home.html')
 
-def product_detail(request,id):
-    category = Category.objects.get(id = id)
-    products = Product.objects.filter(Category=category)
-    context ={
-        "category" : category,
-        "products" : products,
-    }
-
 def mango(request):
-    return render(request,'mango.html')
+    mango_products = MangoProduct.objects.all()
+    return render(request, 'mango.html', {'mango_products': mango_products})
 
 def Lemon(request):
-    return render(request,'Lemon.html')
+    lemon_products = LemonProduct.objects.all()
+    return render(request,'Lemon.html', {'lemon_products': lemon_products})
 
 def Mixed(request):
-    return render(request,'Mixed.html')
+    mixed_products = MixedProduct.objects.all()
+    return render(request,'Mixed.html', {'mixed_products': mixed_products})
 
 def Panjabi(request):
-    return render(request,'Panjabi.html')
+    panjabi_products = PanjabiProduct.objects.all()
+    return render(request,'Panjabi.html', {'panjabi_products': panjabi_products})
 
 def kerda(request):
-    return render(request,'kerda.html')
+    kerda_products = KerdaProduct.objects.all()
+    return render(request,'kerda.html', {'kerda_products': kerda_products})
 
 def Carrot(request):
-    return render(request,'Carrot.html')
+    mango_products = CarrotProduct.objects.all()
+    return render(request,'Carrot.html', {'mango_products': mango_products})
 
 def spicy(request):
     return render(request,'spicy.html')
@@ -84,7 +77,7 @@ def password(request):
     return render(request,'password.html')
 
 def login(request):
-    if request.method == 'POST':  # Ensure it only processes POST requests
+    if request.method == 'POST':  
         email = request.POST['email']
         print(email)
         password = request.POST['password']
@@ -112,7 +105,7 @@ def login(request):
 
 def logout_view(request):
     logout(request)
-    return render(request,'home.html')
+    return redirect('home')  
 
 def checkout(request):
     return render(request,'checkout.html')
@@ -192,5 +185,3 @@ def contact_view(request):
     
     messages.success(request,'somthing went wrong')
     return render(request, 'contact.html')
-
- 

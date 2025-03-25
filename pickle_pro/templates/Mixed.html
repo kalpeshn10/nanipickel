@@ -14,64 +14,30 @@
             </div>
         </div>
     </div>
-      <div class="row mt-4">
-        <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
-          <div class="card p-2 text-center">
-              <img src="{% static 'assets/images/h1.jpeg' %}" class="w-100 wid product-image">
-              <div class="dropdown mt-3">
-                  <h4 class="product-name">Homemade Mango Pickle</h4>
-                  <h4>| Aam ka Achar</h4>
-                  <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
-                      <span class="selected-price" data-price="299" data-size="250g">250g - Rs 299</span>
-                  </button>
-                  <ul class="dropdown-menu">
-                      <li><a class="dropdown-item size-option" href="#" data-price="299" data-size="250g">250g - Rs 299</a></li>
-                      <li><a class="dropdown-item size-option" href="#" data-price="599" data-size="500g">500g - Rs 599</a></li>
-                      <li><a class="dropdown-item size-option" href="#" data-price="999" data-size="1Kg">1Kg - Rs 999</a></li>
-                  </ul>
-                  <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
-              </div>
-          </div>
+        <div class="row mt-4">
+        {% for i in mixed_is %}
+            <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
+                <div class="card p-2 text-center">
+                    <img src="{{ i.image.url }}" class="w-100 wid i-image">
+                    <div class="dropdown mt-3">
+                        <h4 class="i-name">{{ i.name }}</h4>
+                        <h4>| {{ i.description }}</h4>
+                        <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
+                            <span class="selected-price" data-price="{{ i.price_250g }}" data-size="250g">250g - Rs {{ i.price_250g }}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_250g }}" data-size="250g">250g - Rs {{ i.price_250g }}</a></li>
+                            <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_500g }}" data-size="500g">500g - Rs {{ i.price_500g }}</a></li>
+                            <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_1kg }}" data-size="1Kg">1Kg - Rs {{ i.price_1kg }}</a></li>
+                        </ul>
+                        <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center mt-5 mb-5 container-1"><strong class="text-danger">No  Mixed </strong> <strong>products available. &#128532;</strong></p>
+            {% endfor %}
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
-          <div class="card p-2 text-center">
-              <img src="{% static 'assets/images/h1.jpeg' %}" class="w-100 wid product-image">
-              <div class="dropdown mt-3">
-                  <h4 class="product-name">Mango Pickle</h4>
-                  <h4>| Aam ka Achar</h4>
-                  <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
-                      <span class="selected-price" data-price="299" data-size="250g">250g - Rs 299</span>
-                  </button>
-                  <ul class="dropdown-menu">
-                      <li><a class="dropdown-item size-option" href="#" data-price="299" data-size="250g">250g - Rs 299</a></li>
-                      <li><a class="dropdown-item size-option" href="#" data-price="599" data-size="500g">500g - Rs 599</a></li>
-                      <li><a class="dropdown-item size-option" href="#" data-price="999" data-size="1Kg">1Kg - Rs 999</a></li>
-                  </ul>
-                  <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
-              </div>
-          </div>
-        </div>
-  
-        <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
-          <div class="card p-2 text-center">
-              <img src="{% static 'assets/images/h1.jpeg' %}" class="w-100 wid product-image">
-              <div class="dropdown mt-3">
-                  <h4 class="product-name">Homemade Pickle</h4>
-                  <h4>| Aam ka Achar</h4>
-                  <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
-                      <span class="selected-price" data-price="299" data-size="250g">250g - Rs 299</span>
-                  </button>
-                  <ul class="dropdown-menu">
-                      <li><a class="dropdown-item size-option" href="#" data-price="299" data-size="250g">250g - Rs 299</a></li>
-                      <li><a class="dropdown-item size-option" href="#" data-price="599" data-size="500g">500g - Rs 599</a></li>
-                      <li><a class="dropdown-item size-option" href="#" data-price="999" data-size="1Kg">1Kg - Rs 999</a></li>
-                  </ul>
-                  <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
-              </div>
-          </div>
-        </div>
-     </div>
     </div>
   </div>
   <!------------ Our Product End ------------>
