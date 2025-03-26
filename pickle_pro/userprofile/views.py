@@ -8,7 +8,21 @@ from django.contrib.auth import logout
 import ipdb
 
 def home(request):
-    return render(request,'home.html')
+    mango_products = MangoProduct.objects.order_by('-id').first()
+    lemon_products = LemonProduct.objects.order_by('-id').first()
+    mixed_products = MixedProduct.objects.order_by('-id').first()
+    panjabi_products = PanjabiProduct.objects.order_by('-id').first()
+    kerda_products = KerdaProduct.objects.order_by('-id').first()
+    carrot_products = CarrotProduct.objects.order_by('-id').first()
+    context = {
+        'mango_products': mango_products, 
+        'lemon_products': lemon_products,
+        'mixed_products': mixed_products, 
+        'panjabi_products': panjabi_products, 
+        'kerda_products': kerda_products, 
+        'carrot_products': carrot_products,
+    }
+    return render(request, 'home.html', context)
 
 def mango(request):
     mango_products = MangoProduct.objects.all()
@@ -31,14 +45,8 @@ def kerda(request):
     return render(request,'kerda.html', {'kerda_products': kerda_products})
 
 def Carrot(request):
-    mango_products = CarrotProduct.objects.all()
-    return render(request,'Carrot.html', {'mango_products': mango_products})
-
-def spicy(request):
-    return render(request,'spicy.html')
-
-def sweet(request):
-    return render(request,'sweet.html')
+    carrot_products = CarrotProduct.objects.all()
+    return render(request,'Carrot.html', {'carrot_products': carrot_products})
 
 def howwe(request):
     return render(request,'howwe.html')
@@ -109,41 +117,6 @@ def logout_view(request):
 
 def checkout(request):
     return render(request,'checkout.html')
-
-# def view_cart(request):
-#     user = request.user
-#     cart = Cart.objects.get(user=user)
-#     cart_items = cart.items.all()
-#     cart_count = cart_items.count()
-    
-#     context= {
-#         'cart': cart,
-#         'cart_items': cart_items,
-#         'cart_count': cart_count
-#     }
-#     return render(request,'cart.html',context)
-
-# def add_to_cart(request, product_id):
-#     user = request.user
-#     if not user.is_authenticated:
-#         messages.error(request, 'You must be logged in to add items to your cart.')
-#         return redirect('login')
-
-#     product = Product.objects.get(id=product_id)
-#     cart, created = Cart.objects.get_or_create(user= request.user)
-#     cart_item, created=CartItem.objects.get_or_create(cart=cart, product=product)
-
-    
-#     if not created:
-#         cart_item.quantity +=1
-
-#     cart_item.save()
-#     return redirect('view_cart')
-
-# def remove_from_cart(request, item_id):
-#     cart_item = get_object_or_404( CartItem, id=item_id, cart__user=request.user)
-#     cart_item.delete()
-#     return redirect('view_cart')
 
 def contact_view(request):
     if request.method == 'POST':

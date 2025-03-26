@@ -792,10 +792,10 @@ checkout-container {
 	
 } 
 
-h2 {
+/* h2 {
     border-bottom: 2px solid #ddd;
     padding-bottom: 10px;
-}
+} */
 
 form input, form textarea {
     border: 1px solid #ddd;
@@ -817,10 +817,10 @@ form button {
 }
 
 .cont {
-	background-image: url('../images/');
+	background-image: url('..../images/img.jpeg');
 	background-size: cover;
 	background-position: center;
-	/* background-attachment: fixed; */
+	background-attachment: fixed;
 	padding: 20px;
 	margin-top: 20px;
 	padding-top: 10px;
