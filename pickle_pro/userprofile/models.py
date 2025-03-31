@@ -43,7 +43,7 @@ class Product(models.Model):
     product_name = models.CharField(max_length=50)
     image = models.ImageField(upload_to='static/assets/images')
 
-class contactUs(models.Model):
+class ContactUs(models.Model):
     name = models.CharField(max_length=500,null=True,blank=True)
     email = models.EmailField(max_length=500,null=True,blank=True)
     subject = models.CharField(max_length=500,null=True,blank=True)

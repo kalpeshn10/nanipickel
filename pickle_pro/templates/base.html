@@ -73,9 +73,9 @@
               </div>
             {% if request.user.is_authenticated %}
             {% csrf_token %}
-            <button id="logoutBtn" class="btn ma ab btn-hover-tooltip" href="{% url 'logout' %}" data-bs-toggle="tooltip" data-bs-placement="top" title="Logout">
+            <a id="logoutBtn" class="btn ma ab btn-hover-tooltip" href="{% url 'logout' %}" data-bs-toggle="tooltip" data-bs-placement="top" title="Logout">
               <i class="bi bi-box-arrow-right"></i>
-            </button>
+            </a>
             <div class="item rounded">
               <div class="col my-3 position-relative">
                 <button class="btn icon-button ma ab" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas">
@@ -90,6 +90,8 @@
             <button class="icon-button ab" type="button" href="{% url 'login' %}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
               <i class="bi bi-person-fill"></i>
             </button>
+            
+
             <div class="item rounded">
               <div class="col my-3 position-relative">
                <button class="btn icon-button ma ab" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas">
@@ -106,33 +108,34 @@
     </nav>
 
     <!---------------- login Sidebar start ---------------->
-    <div class="offcanvas offcanvas-end login" tabindex="-1" id="offcanvasRight">
-     <div class="offcanvas-header log">
-         <h5 class="offcanvas-title">LOGIN</h5>
-         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-     </div>
-     <div class="offcanvas-body">
+     
+ <div class="offcanvas offcanvas-end login" tabindex="-1" id="offcanvasRight">
+  <div class="offcanvas-header log">
+      <h5 class="offcanvas-title">LOGIN</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
       <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email">
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
-        </div>
-        <div class="d-grid">
-            <button type="submit" class="btn" style="background-color: #de941e;">Sign In</button>
-        </div>
-        <div class="text-center mt-3">
-            <a href="{% url 'createaccount' %}" class="d-block">Create account</a>
-            <a href="{% url 'password' %}" class="d-block">Forgot your password?</a>
-        </div>
+          {% csrf_token %}
+          <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email">
+          </div>
+          <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+          </div>
+          <div class="d-grid">
+              <button type="submit" class="btn" style="background-color: #de941e;">Sign In</button>
+          </div>
+          <div class="text-center mt-3">
+              <a href="{% url 'createaccount' %}" class="d-block">Create account</a>
+              <a href="{% url 'password' %}" class="d-block">Forgot your password?</a>
+          </div>
       </form>
-    
-   </div>
- </div>
+  </div>
+</div>
+
    <!---------------- login Sidebar start ---------------->
 
       <!---------------- addtocart Sidebar start ---------------->
@@ -417,22 +420,22 @@ let totalPrice = 0;
            updateCart();
        }
 
-    function handleSignup(event) {
-        var mobile = document.getElementById("mobile").value;
-        var mobileRegex = /^[0-9]{10}$/;
+    // function handleSignup(event) {
+    //     var mobile = document.getElementById("mobile").value;
+    //     var mobileRegex = /^[0-9]{10}$/;
 
-        if (!mobileRegex.test(mobile)) {
-            document.getElementById("signup-error").innerText = "Invalid mobile number!";
-            event.preventDefault();  // Prevent form submission only if validation fails
-        } else {
-            document.getElementById("signup-error").innerText = "";
-        }
+    //     if (!mobileRegex.test(mobile)) {
+    //         document.getElementById("signup-error").innerText = "Invalid mobile number!";
+    //         event.preventDefault();  // Prevent form submission only if validation fails
+    //     } else {
+    //         document.getElementById("signup-error").innerText = "";
+    //     }
   
-        let offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
-            offcanvas.show();
+    //     let offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
+    //         offcanvas.show();
             
-            alert("Sign-up successful! Please log in.");
-      }
+    //         alert("Sign-up successful! Please log in.");
+    //   }
 
     document.getElementById("checkout-form").addEventListener("submit", function(event) {
       event.preventDefault();
@@ -460,5 +463,24 @@ let totalPrice = 0;
     $(this).closest('.dropdown').find('.selected-price').text(size + " - Rs " + price);
     $(this).closest('.dropdown').find('.selected-price').data("price", price);
   });
+
+
+  document.getElementById("contactForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let subject = document.getElementById("subject").value;
+    let message = document.getElementById("message").value;
+
+    if (name && email && subject && message) {
+        alert("Thank you! Your message has been sent.");
+        this.reset();
+    } else {
+        alert("Please fill in all fields.");
+    }
+});
+
+
 </script>
 </html>

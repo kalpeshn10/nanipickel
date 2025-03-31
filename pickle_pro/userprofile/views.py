@@ -126,16 +126,16 @@ def contact_view(request):
         message = request.POST['message']
         if not name:
             messages.error(request,'name is requred')
-            return render(request,'contact.html')
+            return render(request,'Contact.html')
         if not email:
             messages.error(request,'Email is requried')
-            return render(request,'contact.html')
+            return render(request,'Contact.html')
 
-        if contactUs.objects.filter(email = email).exists():
+        if ContactUs.objects.filter(email = email).exists():
             messages.error(request,'email alredy exists')
-            return render(request,'contact.html')
+            return render(request,'Contact.html')
         
-        created = contactUs.objects.create(name = name, email=email, subject= subject,message=message)
+        created = ContactUs.objects.create(name = name, email=email, subject= subject,message=message)
         created.save()
         send_mail(
                 subject = 'Thank you for contacting us',
@@ -154,7 +154,7 @@ def contact_view(request):
         )
 
         messages.success(request,'message sent successfully')
-        return render(request, 'contact.html')
+        return render(request, 'Contact.html')
     
     messages.success(request,'somthing went wrong')
-    return render(request, 'contact.html')
+    return render(request, 'Contact.html')
