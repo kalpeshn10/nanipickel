@@ -33,7 +33,7 @@
                             <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_500g }}" data-size="500g">500g - Rs {{ i.price_500g }}</a></li>
                             <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_1kg }}" data-size="1Kg">1Kg - Rs {{ i.price_1kg }}</a></li>
                         </ul>
-                        <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
+                        <button class="cart-btn add-to-cart hvr-glow cart" href="{% url 'add_to_cart' i.id %}">Add to Cart</button>
                     </div>
                 </div>
             </div>
