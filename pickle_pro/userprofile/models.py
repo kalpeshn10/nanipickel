@@ -116,3 +116,18 @@ class CarrotProduct(models.Model):
     def __str__(self):
         return self.name
 
+class Cart(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True,blank=True)
+    
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    mangoproduct = models.ForeignKey(MangoProduct, on_delete=models.CASCADE)
+    lemonproduct = models.ForeignKey(LemonProduct, on_delete=models.CASCADE)
+    mixedproduct = models.ForeignKey(MixedProduct, on_delete=models.CASCADE)
+    kerdaproduct = models.ForeignKey(KerdaProduct, on_delete=models.CASCADE)
+    panjabiproduct = models.ForeignKey(PanjabiProduct, on_delete=models.CASCADE)
+    carrotproduct = models.ForeignKey(CarrotProduct, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def total_price(self):
+        return self.quantity * self.mangoproduct.price

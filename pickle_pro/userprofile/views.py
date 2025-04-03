@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login as auth_login,logout
@@ -104,7 +104,6 @@ def login(request):
             messages.success(request, 'Login successful')
             return render(request, 'home.html')
 
-        # Check if email exists, but password is incorrect
         if not CustomUser.objects.filter(email=email).exists():
             messages.error(request, 'Invalid email or password')
             return render(request, 'home.html')
@@ -158,3 +157,22 @@ def contact_view(request):
     
     messages.success(request,'somthing went wrong')
     return render(request, 'Contact.html')
+
+def add_to_cart(request, product_id):
+    user = request.user
+    if not user.is_authenticated:
+        messages.error(request, 'You must be logged in to add items to your cart.')
+        return redirect('login')
+    product = Product.objects.get(id=product_id)
+    cart, created = Cart.objects.get_or_create(user = user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if not created:
+        cart_item.quantity += 1
+        
+    cart_item.save()
+    return redirect('view_cart')
+
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart_user=request.user)
+    cart_item.delete()
+    return redirect('view_cart')
