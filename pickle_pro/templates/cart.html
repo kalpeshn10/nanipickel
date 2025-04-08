@@ -1,0 +1,95 @@
+<div class="offcanvas offcanvas-end off cart-offcanvas" tabindex="-1" id="cartCanvas">
+    <div class="offcanvas-header add">
+        <p>Buy any 4 jars <strong>999</strong> | Code :BUY@999</p>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body table-responsive">
+      <table class="table table-light table-borderless table-hover text-center mb-0">
+        <thead class="thead-dark">
+            <tr>
+                <th>Products</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+         <tbody class="align-middle">
+            {% for i in cart_items %}
+            <tr data-product-id="{{ i.mangoproduct.id }}">
+                <td class="align-middle">
+                    <img src="{{ i.mangoproduct.images.url }}" alt="" style="width: 50px;">
+                    {{ i.mangoproduct.product_name }}
+                </td>
+                <td class="align-middle price">{{ i.mangoproduct.price }}</td>
+                <td class="align-middle">
+                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary btn-minus">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                        <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center quantity-input" value="{{ i.quantity }}" data-price="{{ i.mangoproduct.price }}">
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary btn-plus">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+                <td class="align-middle total-price">{{ i.total_price }}</td>
+                <td class="align-middle">
+                    <button class="btn btn-sm btn-danger btn-remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>        </div>
+        <!-- filepath: c:\nanifarm\nanipickel\pickle_pro\templates\base.html -->
+{% comment %} <tbody class="align-middle">
+{% for item in request.user.cart.items.all %}
+<tr>
+    <td class="align-middle">
+        <img src="{{ item.product.image.url }}" alt="" style="width: 50px;">
+        {{ item.product.name }}
+    </td>
+    <td class="align-middle">{{ item.product.price_250g }}</td>
+    <td class="align-middle">{{ item.quantity }}</td>
+    <td class="align-middle">{{ item.total_price }}</td>
+    <td class="align-middle">
+        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-danger">Remove</a>
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+    </table>
+    <div class="pt-3">
+      <div class="d-flex justify-content-between mt-2">
+          <h5>Total :</h5>
+          <h5 id="grand-total">{{ total_price|add:10 }}</h5>
+      </div>
+      <button class="btn btn-block account mt-3 max" onclick="window.location.href='{% url "checkout" %}';">
+          Proceed To Checkout
+      </button>
+    </div>
+    </div>
+</div>
+<script>
+  function addToCartAndShowCart(url) {
+      fetch(url)
+          .then(response => {
+              if (response.redirected) {
+                  window.location.href = response.url;
+              } else {
+                  // Show offcanvas cart
+                  let offcanvas = new bootstrap.Offcanvas(document.getElementById('cartCanvas'));
+                  offcanvas.show();
+                  // Optionally refresh cart content here via AJAX
+              }
+          })
+          .catch(error => {
+              console.error("Add to cart failed:", error);
+          });
+  }
+</script> {% endcomment %}

@@ -31,7 +31,8 @@
                             <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_500g }}" data-size="500g">500g - Rs {{ i.price_500g }}</a></li>
                             <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_1kg }}" data-size="1Kg">1Kg - Rs {{ i.price_1kg }}</a></li>
                         </ul>
-                        <button class="cart-btn add-to-cart hvr-glow cart" href="{% url 'add_to_cart' i.id %}">Add to Cart</button>
+                        <!-- filepath: c:\nanifarm\nanipickel\pickle_pro\templates\mango.html -->
+        <button class="cart-btn add-to-cart hvr-glow cart" onclick="addToCart('{% url 'add_to_cart' 'mango' i.id %}')">Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -41,7 +42,60 @@
         </div>
     </div>
 </div>
-  
+<script>
+    function addToCart(url) {
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (response.redirected) {
+                // Redirect if the user is not authenticated
+                window.location.href = response.url;
+            } else if (response.ok) {
+                return response.json();
+            } else {
+                console.error("Failed to add to cart:", response.statusText);
+            }
+        })
+        .then(data => {
+            if (data && data.cart_items) {
+                updateCartContent(data.cart_items);
+                // Show the offcanvas cart
+                let offcanvas = new bootstrap.Offcanvas(document.getElementById('cartCanvas'));
+                offcanvas.show();
+            }
+        })
+        .catch(error => {
+            console.error("Add to cart failed:", error);
+        });
+    }
+
+    function updateCartContent(cartItems) {
+        const cartTableBody = document.querySelector("#cartCanvas tbody");
+        cartTableBody.innerHTML = ""; // Clear existing cart items
+
+        cartItems.forEach(item => {
+            const row = `
+                <tr>
+                    <td class="align-middle">
+                        <img src="${item.image}" alt="" style="width: 50px;">
+                        ${item.name}
+                    </td>
+                    <td class="align-middle">${item.price}</td>
+                    <td class="align-middle">${item.quantity}</td>
+                    <td class="align-middle">${item.total_price}</td>
+                    <td class="align-middle">
+                        <button class="btn btn-sm btn-danger">Remove</button>
+                    </td>
+                </tr>
+            `;
+            cartTableBody.insertAdjacentHTML("beforeend", row);
+        });
+    }
+</script>   
        
   <!------------ Our Product End ------------>
 

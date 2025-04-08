@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,login as auth_login,logout
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth import logout
+from django.contrib.contenttypes.models import ContentType
 import ipdb
 
 def home(request):
@@ -158,21 +159,43 @@ def contact_view(request):
     messages.success(request,'somthing went wrong')
     return render(request, 'Contact.html')
 
-def add_to_cart(request, product_id):
+def add_to_cart(request, product_type, product_id):
     user = request.user
     if not user.is_authenticated:
         messages.error(request, 'You must be logged in to add items to your cart.')
         return redirect('login')
-    product = Product.objects.get(id=product_id)
-    cart, created = Cart.objects.get_or_create(user = user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+    product_model = {
+        'mango': MangoProduct,
+        'lemon': LemonProduct,
+        'mixed': MixedProduct,
+        'kerda': KerdaProduct,
+        'panjabi': PanjabiProduct,
+        'carrot': CarrotProduct,
+    }.get(product_type)
+
+    if not product_model:
+        messages.error(request, 'Invalid product type.')
+        return redirect('createaccount')
+
+    product = get_object_or_404(product_model, id=product_id)
+    cart, created = Cart.objects.get_or_create(user=user)
+    content_type = ContentType.objects.get_for_model(product)
+
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        content_type=content_type,
+        object_id=product.id,
+    )
+
     if not created:
         cart_item.quantity += 1
-        
-    cart_item.save()
-    return redirect('view_cart')
+        cart_item.save()
+
+    messages.success(request, f'{product.name} has been added to your cart.')
+    return redirect('createaccount')
 
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart_user=request.user)
     cart_item.delete()
-    return redirect('view_cart')
+    return redirect('createaccount')
