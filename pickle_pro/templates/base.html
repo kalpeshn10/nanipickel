@@ -152,38 +152,23 @@
                   <th>Remove</th>
               </tr>
           </thead>
-          {% comment %} <tbody class="align-middle">
-              {% for i in cart_items %}
-              <tr data-product-id="{{ i.product.id }}">
-                  <td class="align-middle">
-                      <img src="{{ i.product.images.url }}" alt="" style="width: 50px;">
-                      {{ i.product.product_name }}
-                  </td>
-                  <td class="align-middle price">{{ i.product.price }}</td>
-                  <td class="align-middle">
-                      <div class="input-group quantity mx-auto" style="width: 100px;">
-                          <div class="input-group-btn">
-                              <button class="btn btn-sm btn-primary btn-minus">
-                                  <i class="fa fa-minus"></i>
-                              </button>
-                          </div>
-                          <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center quantity-input" value="{{ i.quantity }}" data-price="{{ i.product.price }}">
-                          <div class="input-group-btn">
-                              <button class="btn btn-sm btn-primary btn-plus">
-                                  <i class="fa fa-plus"></i>
-                              </button>
-                          </div>
-                      </div>
-                  </td>
-                  <td class="align-middle total-price">{{ i.total_price }}</td>
-                  <td class="align-middle">
-                      <button class="btn btn-sm btn-danger btn-remove">
-                          <i class="fa fa-times"></i>
-                      </button>
-                  </td>
-              </tr>
-              {% endfor %}
-          </tbody>         {% endcomment %}
+          <tbody class="align-middle">
+            {% for item in cart_items %}
+            <tr>
+                <td class="align-middle">
+                    <img src="{{ item.content_object.image.url }}" alt="" style="width: 50px;">
+                    {{ item.content_object.name }}
+                </td>
+                <td class="align-middle">{{ item.content_object.price_250g }}</td>
+                <td class="align-middle">{{ item.quantity }}</td>
+                <td class="align-middle">{{ item.total_price }}</td>
+                <td class="align-middle">
+                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-danger">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>          
           <!-- filepath: c:\nanifarm\nanipickel\pickle_pro\templates\base.html -->
 <tbody class="align-middle">
   {% for item in request.user.cart.items.all %}
@@ -214,22 +199,41 @@
       </div>
   </div>
   <script>
-    function addToCartAndShowCart(url) {
-        fetch(url)
-            .then(response => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                } else {
-                    // Show offcanvas cart
-                    let offcanvas = new bootstrap.Offcanvas(document.getElementById('cartCanvas'));
-                    offcanvas.show();
-                    // Optionally refresh cart content here via AJAX
-                }
-            })
-            .catch(error => {
-                console.error("Add to cart failed:", error);
+    function loadCartSidebar() {
+    fetch('/get-cart-items/')
+        .then(response => response.json())
+        .then(data => {
+            const cartTableBody = document.querySelector("#cartCanvas tbody");
+            const totalPriceElement = document.getElementById("grand-total");
+
+            cartTableBody.innerHTML = ""; // Clear existing rows
+
+            data.cart_items.forEach(item => {
+                const row = `
+                    <tr>
+                        <td class="align-middle">
+                            <img src="${item.image}" alt="" style="width: 50px;">
+                            ${item.name}
+                        </td>
+                        <td class="align-middle">${item.price}</td>
+                        <td class="align-middle">${item.quantity}</td>
+                        <td class="align-middle">${item.total_price}</td>
+                        <td class="align-middle">
+                            <button class="btn btn-sm btn-danger">Remove</button>
+                        </td>
+                    </tr>
+                `;
+                cartTableBody.insertAdjacentHTML("beforeend", row);
             });
-    }
+
+            totalPriceElement.textContent = data.total_price;
+        })
+        .catch(error => {
+            console.error("Failed to load cart items:", error);
+        });
+}
+let cartCanvas = document.getElementById('cartCanvas');
+cartCanvas.addEventListener('show.bs.offcanvas', loadCartSidebar);
   </script>
     
   <!--addtocart Sidebar start -->

@@ -159,6 +159,8 @@ def contact_view(request):
     messages.success(request,'somthing went wrong')
     return render(request, 'Contact.html')
 
+from django.contrib.contenttypes.models import ContentType
+
 def add_to_cart(request, product_type, product_id):
     user = request.user
     if not user.is_authenticated:
@@ -193,9 +195,40 @@ def add_to_cart(request, product_type, product_id):
         cart_item.save()
 
     messages.success(request, f'{product.name} has been added to your cart.')
-    return redirect('createaccount')
+    return redirect('add_to_cart')
+
 
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart_user=request.user)
     cart_item.delete()
     return redirect('createaccount')
+
+from django.http import JsonResponse
+def get_cart_items(request):
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    items = cart.items.select_related('content_type')  # Optional but good for performance
+
+    cart_items_data = []
+    total_price = 0
+
+    for item in items:
+        product = item.product  # ✅ This is the correct way to access the actual product
+
+        if not product:
+            continue  # Skip broken items
+
+        cart_items_data.append({
+            'id': item.id,
+            'name': product.name,
+            'image': product.image.url if product.image else '',
+            'price': product.price_250g,
+            'quantity': item.quantity,
+            'total_price': item.total_price()
+        })
+
+        total_price += item.total_price()
+
+    return JsonResponse({
+        'cart_items': cart_items_data,
+        'total_price': total_price
+    })

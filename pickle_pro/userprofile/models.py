@@ -119,10 +119,18 @@ class CarrotProduct(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True,blank=True)
     
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
-    mangoproduct = models.ForeignKey(MangoProduct, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE,null=True,blank=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,null=True,blank=True)
+    object_id = models.PositiveIntegerField(null=True,blank=True)
+    product = GenericForeignKey('content_type', 'object_id')
+    quantity = models.PositiveIntegerField(default=1,null=True,blank=True)
 
     def total_price(self):
-        return self.quantity * self.mangoproduct.price
+        try:
+            return self.quantity * self.product.price_250g
+        except AttributeError:
+            return 0

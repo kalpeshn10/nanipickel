@@ -9,3 +9,6 @@ admin.site.register(PanjabiProduct)
 admin.site.register(KerdaProduct)
 admin.site.register(CarrotProduct)
 admin.site.register(ContactUs)
+admin.site.register(Cart)
+admin.site.register(CartItem)
+

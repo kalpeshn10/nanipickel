@@ -16,29 +16,34 @@
         </div>
       </div>
         <div class="row mt-4">
-        {% for i in mango_products %}
-            <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
-                <div class="card p-2 text-center">
-                    <img src="{{ i.image.url }}" class="w-100 wid i-image">
-                    <div class="dropdown mt-3">
-                        <h4 class="i-name">{{ i.name }}</h4>
-                        <h4>| {{ i.description }}</h4>
-                        <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
-                            <span class="selected-price" data-price="{{ i.price_250g }}" data-size="250g">250g - Rs {{ i.price_250g }}</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_250g }}" data-size="250g">250g - Rs {{ i.price_250g }}</a></li>
-                            <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_500g }}" data-size="500g">500g - Rs {{ i.price_500g }}</a></li>
-                            <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_1kg }}" data-size="1Kg">1Kg - Rs {{ i.price_1kg }}</a></li>
-                        </ul>
-                        <!-- filepath: c:\nanifarm\nanipickel\pickle_pro\templates\mango.html -->
-        <button class="cart-btn add-to-cart hvr-glow cart" onclick="addToCart('{% url 'add_to_cart' 'mango' i.id %}')">Add to Cart</button>
+            {% for i in mango_products %}
+            {% if i.id %}
+                <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
+                    <div class="card p-2 text-center">
+                        <img src="{{ i.image.url }}" class="w-100 wid i-image">
+                        <div class="dropdown mt-3">
+                            <h4 class="i-name">{{ i.name }}</h4>
+                            <h4>| {{ i.description }}</h4>
+                            <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
+                                <span class="selected-price" data-price="{{ i.price_250g }}" data-size="250g">250g - Rs {{ i.price_250g }}</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_250g }}" data-size="250g">250g - Rs {{ i.price_250g }}</a></li>
+                                <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_500g }}" data-size="500g">500g - Rs {{ i.price_500g }}</a></li>
+                                <li><a class="dropdown-item size-option" href="#" data-price="{{ i.price_1kg }}" data-size="1Kg">1Kg - Rs {{ i.price_1kg }}</a></li>
+                            </ul>
+                            <button class="cart-btn add-to-cart hvr-glow cart" onclick="addToCart('{% url 'add_to_cart' 'mango' i.id %}')">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-                <p class="text-center mt-5 mb-5 container-1"><strong class="text-danger">No  Mango </strong> <strong>products available. &#128532;</strong></p>
-            {% endfor %}
+            {% endif %}
+        {% empty %}
+            <p class="text-center mt-5 mb-5 container-1">
+                <strong class="text-danger">No Mango </strong> 
+                <strong>products available. &#128532;</strong>
+            </p>
+        {% endfor %}
+        
         </div>
     </div>
 </div>
