@@ -57,20 +57,20 @@
       </div>
   </div>
   <div class="row mb-5">
-    {% if mango_product %}
+    {% if mango_products %}
         <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
             <div class="card p-2 text-center">
-                <img src="{{ mango_product.image.url }}" class="w-100 wid i-image">
+                <img src="{{ mango_products.image.url }}" class="w-100 wid i-image">
                 <div class="dropdown mt-3">
-                    <h4 class="i-name">{{ mango_product.name }}</h4>
-                    <h4>| {{ mango_product.description }}</h4>
+                    <h4 class="i-name">{{ mango_products.name }}</h4>
+                    <h4>| {{ mango_products.description }}</h4>
                     <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
-                        <span class="selected-price" data-price="{{ mango_product.price_250g }}" data-size="250g">250g - Rs {{ mango_product.price_250g }}</span>
+                        <span class="selected-price" data-price="{{ mango_products.price_250g }}" data-size="250g">250g - Rs {{ mango_products.price_250g }}</span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item size-option" href="#" data-price="{{ mango_product.price_250g }}" data-size="250g">250g - Rs {{ mango_product.price_250g }}</a></li>
-                        <li><a class="dropdown-item size-option" href="#" data-price="{{ mango_product.price_500g }}" data-size="500g">500g - Rs {{ mango_product.price_500g }}</a></li>
-                        <li><a class="dropdown-item size-option" href="#" data-price="{{ mango_product.price_1kg }}" data-size="1Kg">1Kg - Rs {{ mango_product.price_1kg }}</a></li>
+                        <li><a class="dropdown-item size-option" href="#" data-price="{{ mango_products.price_250g }}" data-size="250g">250g - Rs {{ mango_products.price_250g }}</a></li>
+                        <li><a class="dropdown-item size-option" href="#" data-price="{{ mango_products.price_500g }}" data-size="500g">500g - Rs {{ mango_products.price_500g }}</a></li>
+                        <li><a class="dropdown-item size-option" href="#" data-price="{{ mango_products.price_1kg }}" data-size="1Kg">1Kg - Rs {{ mango_products.price_1kg }}</a></li>
                     </ul>
                     <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
                 </div>
@@ -78,20 +78,20 @@
         </div>
     {% endif %}
 
-    {% if lemon_product %}
+    {% if lemon_products %}
         <div class="col-12 col-md-6 col-lg-4 hvr-float"> 
             <div class="card p-2 text-center">
-                <img src="{{ lemon_product.image.url }}" class="w-100 wid i-image">
+                <img src="{{ lemon_products.image.url }}" class="w-100 wid i-image">
                 <div class="dropdown mt-3">
-                    <h4 class="i-name">{{ lemon_product.name }}</h4>
-                    <h4>| {{ lemon_product.description }}</h4>
+                    <h4 class="i-name">{{ lemon_products.name }}</h4>
+                    <h4>| {{ lemon_products.description }}</h4>
                     <button class="btn btn-light dropdown-toggle box" type="button" data-bs-toggle="dropdown">
-                        <span class="selected-price" data-price="{{ lemon_product.price_250g }}" data-size="250g">250g - Rs {{ lemon_product.price_250g }}</span>
+                        <span class="selected-price" data-price="{{ lemon_products.price_250g }}" data-size="250g">250g - Rs {{ lemon_products.price_250g }}</span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item size-option" href="#" data-price="{{ lemon_product.price_250g }}" data-size="250g">250g - Rs {{ lemon_product.price_250g }}</a></li>
-                        <li><a class="dropdown-item size-option" href="#" data-price="{{ lemon_product.price_500g }}" data-size="500g">500g - Rs {{ lemon_product.price_500g }}</a></li>
-                        <li><a class="dropdown-item size-option" href="#" data-price="{{ lemon_product.price_1kg }}" data-size="1Kg">1Kg - Rs {{ lemon_product.price_1kg }}</a></li>
+                        <li><a class="dropdown-item size-option" href="#" data-price="{{ lemon_products.price_250g }}" data-size="250g">250g - Rs {{ lemon_products.price_250g }}</a></li>
+                        <li><a class="dropdown-item size-option" href="#" data-price="{{ lemon_products.price_500g }}" data-size="500g">500g - Rs {{ lemon_products.price_500g }}</a></li>
+                        <li><a class="dropdown-item size-option" href="#" data-price="{{ lemon_products.price_1kg }}" data-size="1Kg">1Kg - Rs {{ lemon_products.price_1kg }}</a></li>
                     </ul>
                     <button class="cart-btn add-to-cart hvr-glow cart">Add to Cart</button>
                 </div>

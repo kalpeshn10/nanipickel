@@ -35,7 +35,7 @@
           <span class="navbar-toggler-icon"></span>
       </button>
        <div class="collapse navbar-collapse  mynav" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav pad">
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="ingredientsDropdown" role="button"
@@ -65,12 +65,12 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'blogs' %}">blogs</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'Contact' %}">Contact US</a></li>
               </ul>
-              <div class="search-container">
+              {% comment %} <div class="search-container">
                   <input type="text" class="form-control search-input" placeholder="Search our store">
                   <button class="search-btn">
                       <i class="bi bi-search"></i>
-                  </button>
-              </div>
+                  </button>{% endcomment %}
+              </div> 
             {% if request.user.is_authenticated %}
             {% csrf_token %}
             <a id="logoutBtn" class="btn ma ab btn-hover-tooltip" href="{% url 'logout' %}" data-bs-toggle="tooltip" data-bs-placement="top" title="Logout">
@@ -152,7 +152,7 @@
                   <th>Remove</th>
               </tr>
           </thead>
-          <tbody class="align-middle">
+          {% comment %} <tbody class="align-middle">
               {% for i in cart_items %}
               <tr data-product-id="{{ i.product.id }}">
                   <td class="align-middle">
@@ -183,7 +183,24 @@
                   </td>
               </tr>
               {% endfor %}
-          </tbody>        
+          </tbody>         {% endcomment %}
+          <!-- filepath: c:\nanifarm\nanipickel\pickle_pro\templates\base.html -->
+<tbody class="align-middle">
+  {% for item in request.user.cart.items.all %}
+  <tr>
+      <td class="align-middle">
+          <img src="{{ item.product.image.url }}" alt="" style="width: 50px;">
+          {{ item.product.name }}
+      </td>
+      <td class="align-middle">{{ item.product.price_250g }}</td>
+      <td class="align-middle">{{ item.quantity }}</td>
+      <td class="align-middle">{{ item.total_price }}</td>
+      <td class="align-middle">
+          <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-danger">Remove</a>
+      </td>
+  </tr>
+  {% endfor %}
+</tbody>
       </table>
       <div class="pt-3">
         <div class="d-flex justify-content-between mt-2">
@@ -196,9 +213,28 @@
       </div>
       </div>
   </div>
-  <!---------------- addtocart Sidebar start ---------------->
+  <script>
+    function addToCartAndShowCart(url) {
+        fetch(url)
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    // Show offcanvas cart
+                    let offcanvas = new bootstrap.Offcanvas(document.getElementById('cartCanvas'));
+                    offcanvas.show();
+                    // Optionally refresh cart content here via AJAX
+                }
+            })
+            .catch(error => {
+                console.error("Add to cart failed:", error);
+            });
+    }
+  </script>
     
-  <!------------ navbar End ---------------->
+  <!--addtocart Sidebar start -->
+    
+  <!-- navbar End -->
   
 <!------------ TopButton Start ---------------->
 <button id="topBtn" class="btn"><i class="bi bi-arrow-up-circle"></i></button>
@@ -257,7 +293,7 @@
 
      <div class="col-lg-5 col-md-12 text-center mt-4 foot">
        <img src="{% static 'assets/images/maa_2.png'%}" class="hvr-pulse-grow rounded" width="120px">
-       <p class="mt-3 mb-3"><b>FOLLOW US FOR FARMDIDI</b></p>
+       <p class="mt-3 mb-3"><b>FOLLOW US FOR ACHARIMAA</b></p>
        <ul class="list-inline">
          <li class="list-inline-item"><a href="#" class="hvr-pulse-grow"><i class="rounded fa-brands fa-facebook"></i></a></li>
                  <li class="list-inline-item"><a href="#" class="hvr-pulse-grow"><i class="rounded fa-brands fa-square-whatsapp"></i></a></li>
