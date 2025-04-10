@@ -15,6 +15,8 @@ def home(request):
     panjabi_products = PanjabiProduct.objects.order_by('-id').first()
     kerda_products = KerdaProduct.objects.order_by('-id').first()
     carrot_products = CarrotProduct.objects.order_by('-id').first()
+    if request.user.is_authenticated:
+        cart_count = cart_count = CartItem.objects.filter(cart__user=request.user).count()
     context = {
         'mango_products': mango_products, 
         'lemon_products': lemon_products,
@@ -22,6 +24,7 @@ def home(request):
         'panjabi_products': panjabi_products, 
         'kerda_products': kerda_products, 
         'carrot_products': carrot_products,
+        'cart_count': cart_count,
     }
     return render(request, 'home.html', context)
 
@@ -160,46 +163,60 @@ def contact_view(request):
     return render(request, 'Contact.html')
 
 from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponseBadRequest
 
 def add_to_cart(request, product_type, product_id):
-    user = request.user
-    if not user.is_authenticated:
-        messages.error(request, 'You must be logged in to add items to your cart.')
-        return redirect('login')
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid request method")
 
-    product_model = {
+    size = request.POST.get('size')
+    if size not in ['250g', '500g', '1kg']:
+        return HttpResponseBadRequest("Invalid size")
+
+    # Normalize product type to lowercase
+    product_type = product_type.lower()
+
+    product_model_map = {
         'mango': MangoProduct,
         'lemon': LemonProduct,
         'mixed': MixedProduct,
         'kerda': KerdaProduct,
         'panjabi': PanjabiProduct,
-        'carrot': CarrotProduct,
-    }.get(product_type)
+        'carrot': CarrotProduct
+    }
 
+    product_model = product_model_map.get(product_type)
     if not product_model:
-        messages.error(request, 'Invalid product type.')
-        return redirect('cart')
+        return HttpResponseBadRequest("Invalid product type")
 
     product = get_object_or_404(product_model, id=product_id)
-    cart, created = Cart.objects.get_or_create(user=user)
-    content_type = ContentType.objects.get_for_model(product)
 
+    price = getattr(product, f'price_{size}', None)
+    if price is None:
+        return HttpResponseBadRequest("Price not found for selected size")
+
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+
+    content_type = ContentType.objects.get_for_model(product)
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
         content_type=content_type,
         object_id=product.id,
+        size=size,
+        defaults={'price': price, 'quantity': 1}
     )
 
     if not created:
         cart_item.quantity += 1
         cart_item.save()
 
-    messages.success(request, f'{product.name} has been added to your cart.')
-    return redirect('add_to_cart')
+    messages.success(request, f"{product.name} ({size}) added to your cart!")
+    return redirect('cart')
+
 
 
 def remove_from_cart(request, item_id):
-    cart_item = get_object_or_404(CartItem, id=item_id, cart_user=request.user)
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     cart_item.delete()
     return redirect('cart')
 
@@ -239,7 +256,8 @@ def get_cart_items(request, product):
 
     return JsonResponse({
         'cart_items': cart_items_data,
-        'total_price': total_price
+        'total_price': total_price,
+        "cart_count": cart.items.count()
     })
 
 # from django.http import JsonResponse
@@ -318,12 +336,12 @@ def view_cart(request):
     cart, created = Cart.objects.get_or_create(user=user)
     cart_items = cart.items.all()
 
-    # Calculate the total price for all items in the cart
-    # total_price = sum(item.total_price() for item in cart_items)
+    # Correct usage of method
+    total_price = sum(item.total_price() for item in cart_items)
 
     context = {
         'cart': cart,
         'cart_items': cart_items,
-        # 'total_price': total_price,
+        'total_price': total_price,
     }
     return render(request, 'cart.html', context)

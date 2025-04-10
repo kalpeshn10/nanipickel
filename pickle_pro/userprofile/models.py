@@ -136,28 +136,16 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 #             return 0
 
 class CartItem(models.Model):
-    WEIGHT_CHOICES = [
-        ('250g', '250g'),
-        ('500g', '500g'),
-        ('1kg', '1kg'),
-    ]
-
-    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE, null=True, blank=True)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
-    object_id = models.PositiveIntegerField(null=True, blank=True)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items',null=True,blank=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,null=True,blank=True)
+    object_id = models.PositiveIntegerField(null=True,blank=True)
     product = GenericForeignKey('content_type', 'object_id')
-    quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
-    weight_choice = models.CharField(max_length=10, choices=WEIGHT_CHOICES, null=True, blank=True)  
 
+    size = models.CharField(max_length=10,null=True,blank=True)
+    price = models.PositiveIntegerField(null=True,blank=True)
+    quantity = models.PositiveIntegerField(null=True,blank=True)
 
     def total_price(self):
-        try:
-            if self.weight_choice == '250g':
-                return self.quantity * self.product.price_250g
-            elif self.weight_choice == '500g':
-                return self.quantity * self.product.price_500g
-            elif self.weight_choice == '1kg':
-                return self.quantity * self.product.price_1kg
-        except AttributeError:
-            return 0
+        return (self.price or 0) * self.quantity 
+
         

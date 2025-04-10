@@ -21,6 +21,7 @@
                 <thead class="thead-dark bg-dark text-white">
                 <tr>
                     <th>Product</th>
+                    <th>Weight</th>
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Total</th>
@@ -34,9 +35,10 @@
                         <img src="{{item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px;" class="me-2">
                         <strong>{{ item.product.name }}</strong>
                     </td>
-                    <td class="align-middle">₹{{ item.product.price_250g }}</td>
+                    <td class="align-middle">{{ item.size }}</td> <!-- ✅ Show selected weight -->
+                    <td class="align-middle">₹{{ item.price }}</td> <!-- ✅ Show correct price -->
                     <td class="align-middle">{{ item.quantity }}</td>
-                    <td class="align-middle">₹{{ item.total_price}}</td>
+                    <td class="align-middle">₹{{ item.total_price }}</td>
                     <td class="align-middle">
                         <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-danger">Remove</a>
                     </td>
