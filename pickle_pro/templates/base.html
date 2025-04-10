@@ -78,12 +78,13 @@
             </a>
             <div class="item rounded">
               <div class="col my-3 position-relative">
-                <button class="btn icon-button ma ab" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas">
+                <button onclick="window.location.href='{% url 'cart' %}'" class="btn icon-button ma ab">
                   <i class="fas fa-shopping-cart"></i>
+                  <div class="position-absolute text-dec">
+                <span class="cart-icon badge cart-count text-bg-danger text-dec rounded" onclick="goToCart()">
+                  <span id="cart-count" class="cart-count">0</span>
+                </span></div>
                 </button>
-                <div class="position-absolute text-dec">
-                    <span id="cartCount" class="cart-count d-none badge text-bg-danger text-dec rounded">0</span>
-                </div>
               </div>
             </div>
             {% else %}
@@ -92,7 +93,7 @@
             </button>
             <div class="item rounded">
               <div class="col my-3 position-relative">
-               <button class="btn icon-button ma ab" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas">
+               <button class="btn icon-button ma ab" href="{% url 'cart' %}">
                  <i class="fas fa-shopping-cart"></i> 
                 </button>
                 <div class="position-absolute text-dec">
@@ -104,6 +105,19 @@
         </div>
       </div>
     </nav>
+
+<script>
+function addToCart() {
+    // Example: Simulate adding to cart (you'd use actual data here)
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push({ id: 1, name: "Mango", quantity: 1 });
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Redirect to cart page
+    window.location.href = '{% url 'cart' %}';
+}
+</script>
+
 
     <!---------------- login Sidebar start ---------------->
     <div class="offcanvas offcanvas-end login" tabindex="-1" id="offcanvasRight">
@@ -198,43 +212,6 @@
       </div>
       </div>
   </div>
-  <script>
-    function loadCartSidebar() {
-    fetch('/get-cart-items/')
-        .then(response => response.json())
-        .then(data => {
-            const cartTableBody = document.querySelector("#cartCanvas tbody");
-            const totalPriceElement = document.getElementById("grand-total");
-
-            cartTableBody.innerHTML = ""; // Clear existing rows
-
-            data.cart_items.forEach(item => {
-                const row = `
-                    <tr>
-                        <td class="align-middle">
-                            <img src="${item.image}" alt="" style="width: 50px;">
-                            ${item.name}
-                        </td>
-                        <td class="align-middle">${item.price}</td>
-                        <td class="align-middle">${item.quantity}</td>
-                        <td class="align-middle">${item.total_price}</td>
-                        <td class="align-middle">
-                            <button class="btn btn-sm btn-danger">Remove</button>
-                        </td>
-                    </tr>
-                `;
-                cartTableBody.insertAdjacentHTML("beforeend", row);
-            });
-
-            totalPriceElement.textContent = data.total_price;
-        })
-        .catch(error => {
-            console.error("Failed to load cart items:", error);
-        });
-}
-let cartCanvas = document.getElementById('cartCanvas');
-cartCanvas.addEventListener('show.bs.offcanvas', loadCartSidebar);
-  </script>
     
   <!--addtocart Sidebar start -->
     
