@@ -178,7 +178,7 @@ def add_to_cart(request, product_type, product_id):
 
     if not product_model:
         messages.error(request, 'Invalid product type.')
-        return redirect('createaccount')
+        return redirect('cart')
 
     product = get_object_or_404(product_model, id=product_id)
     cart, created = Cart.objects.get_or_create(user=user)
@@ -201,15 +201,24 @@ def add_to_cart(request, product_type, product_id):
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart_user=request.user)
     cart_item.delete()
-    return redirect('createaccount')
+    return redirect('cart')
 
 from django.http import JsonResponse
-def get_cart_items(request):
+
+def get_cart_items(request, product):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     items = cart.items.select_related('content_type')  # Optional but good for performance
 
     cart_items_data = []
     total_price = 0
+    product_model = {
+        'mango': MangoProduct,
+        'lemon': LemonProduct,
+        'mixed': MixedProduct,
+        'kerda': KerdaProduct,
+        'panjabi': PanjabiProduct,
+        'carrot': CarrotProduct,
+    }.get(product)
 
     for item in items:
         product = item.product  # ✅ This is the correct way to access the actual product
@@ -232,3 +241,89 @@ def get_cart_items(request):
         'cart_items': cart_items_data,
         'total_price': total_price
     })
+
+# from django.http import JsonResponse
+# from .models import Cart
+# from django.contrib.contenttypes.models import ContentType
+
+# def get_cart_items(request):
+#     cart, _ = Cart.objects.get_or_create(user=request.user)
+#     items = cart.items.select_related('content_type')  # Optimized
+
+#     cart_items_data = []
+#     total_price = 0
+
+#     for item in items:
+#         product = item.product  # Access the actual product via GenericForeignKey
+
+#         if not product:
+#             continue  # Skip broken/missing products
+
+#         # Dynamically get all prices safely
+#         price_250g = getattr(product, 'price_250g', None)
+#         price_500g = getattr(product, 'price_500g', None)
+#         price_1kg = getattr(product, 'price_1kg', None)
+
+#         # You can use item.size or item.quantity to choose price, here example assumes size
+#         # Let's assume item has `size` field: "250g", "500g", "1kg"
+#         if hasattr(item, 'size'):
+#             if item.size == '250g':
+#                 price = price_250g
+#             elif item.size == '500g':
+#                 price = price_500g
+#             elif item.size == '1kg':
+#                 price = price_1kg
+#             else:
+#                 price = price_250g  # default fallback
+#         else:
+#             price = price_250g  # default if no size field exists
+
+#         # Ensure price is not None
+#         if price is None:
+#             continue
+
+#         item_total = price * item.quantity
+#         total_price += item_total
+
+#         cart_items_data.append({
+#             'id': item.id,
+#             'name': getattr(product, 'name', 'Unnamed'),
+#             'image': product.image.url if getattr(product, 'image', None) else '',
+#             'price': item.price,
+#             'quantity': item.quantity,
+#             'size': getattr(item, 'size', '250g'),
+#             'total_price': item_total
+#         })
+
+#     return JsonResponse({
+#         'cart_items': cart_items_data,
+#         'total_price': total_price
+#     })
+
+    
+# def view_cart(request):
+#     user = request.user
+#     cart, created = Cart.objects.get_or_create(user=user)
+#     cart_items = cart.items.all()
+#     # total_price = sum(item.total_price() for item in cart_items)
+#     context = {
+#         'cart': cart,
+#         'cart_items': cart_items,
+#         # 'total_price': total_price,
+#     }
+#     return render(request, 'cart.html', context)
+
+def view_cart(request):
+    user = request.user
+    cart, created = Cart.objects.get_or_create(user=user)
+    cart_items = cart.items.all()
+
+    # Calculate the total price for all items in the cart
+    # total_price = sum(item.total_price() for item in cart_items)
+
+    context = {
+        'cart': cart,
+        'cart_items': cart_items,
+        # 'total_price': total_price,
+    }
+    return render(request, 'cart.html', context)

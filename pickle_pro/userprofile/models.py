@@ -122,15 +122,42 @@ class Cart(models.Model):
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
+# class CartItem(models.Model):
+#     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE,null=True,blank=True)
+#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,null=True,blank=True)
+#     object_id = models.PositiveIntegerField(null=True,blank=True)
+#     product = GenericForeignKey('content_type', 'object_id')
+#     quantity = models.PositiveIntegerField(default=1,null=True,blank=True)
+
+#     def total_price(self):
+#         try:
+#             return self.quantity * self.product.price_250g
+#         except AttributeError:
+#             return 0
+
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE,null=True,blank=True)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,null=True,blank=True)
-    object_id = models.PositiveIntegerField(null=True,blank=True)
+    WEIGHT_CHOICES = [
+        ('250g', '250g'),
+        ('500g', '500g'),
+        ('1kg', '1kg'),
+    ]
+
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE, null=True, blank=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
     product = GenericForeignKey('content_type', 'object_id')
-    quantity = models.PositiveIntegerField(default=1,null=True,blank=True)
+    quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
+    weight_choice = models.CharField(max_length=10, choices=WEIGHT_CHOICES, null=True, blank=True)  
+
 
     def total_price(self):
         try:
-            return self.quantity * self.product.price_250g
+            if self.weight_choice == '250g':
+                return self.quantity * self.product.price_250g
+            elif self.weight_choice == '500g':
+                return self.quantity * self.product.price_500g
+            elif self.weight_choice == '1kg':
+                return self.quantity * self.product.price_1kg
         except AttributeError:
             return 0
+        
