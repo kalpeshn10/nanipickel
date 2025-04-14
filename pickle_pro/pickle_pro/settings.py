@@ -150,10 +150,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "userprofile.CustomUser"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'smitghadiya4140@gmail.com'
+# EMAIL_HOST_PASSWORD ='flbkudiktwxjthqx'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'smitghadiya4140@gmail.com'
-EMAIL_HOST_PASSWORD ='flbkudiktwxjthqx'
+EMAIL_HOST_PASSWORD = 'flbkudiktwxjthqx'  # Gmail App Password

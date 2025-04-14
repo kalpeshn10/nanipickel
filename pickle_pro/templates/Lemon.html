@@ -27,16 +27,18 @@
                                 <h4 class="i-name">{{ i.name }}</h4>
                                 <h4>| {{ i.description }}</h4>
                                 
-                                <div class="mb-2">
-                                    <select name="size" class="form-select" required>
-                                        <option value="" disabled selected>Select Size</option>
-                                        <option value="250g">250g - Rs {{ i.price_250g }}</option>
-                                        <option value="500g">500g - Rs {{ i.price_500g }}</option>
-                                        <option value="1kg">1Kg - Rs {{ i.price_1kg }}</option>
-                                    </select>
-                                </div>
-
-                                <button type="submit" class="btn btn-success cart-btn hvr-glow">Add to Cart</button>
+                             <div class="d-flex align-items-center gap-1 mt-2">
+                                <select name="size" class="form-select box w-75" required>
+                                    <option value="" disabled selected>Select Size</option>
+                                    <option value="250g">250g - Rs {{ i.price_250g }}</option>
+                                    <option value="500g">500g - Rs {{ i.price_500g }}</option>
+                                    <option value="1kg">1Kg - Rs {{ i.price_1kg }}</option>
+                                </select>
+                                
+                                <button type="submit" class="add-to-cart hvr-glow cart cart-btn w-50">
+                                    Add to Cart
+                                </button>
+                            </div>
                             </div>
                         </div>
                     </form>
