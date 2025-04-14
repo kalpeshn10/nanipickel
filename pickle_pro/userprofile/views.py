@@ -6,6 +6,14 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.contenttypes.models import ContentType
+from django.http import JsonResponse
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseBadRequest 
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from .models import CustomUser
+import random
+import json
 import ipdb
 
 def home(request):
@@ -15,111 +23,394 @@ def home(request):
     panjabi_products = PanjabiProduct.objects.order_by('-id').first()
     kerda_products = KerdaProduct.objects.order_by('-id').first()
     carrot_products = CarrotProduct.objects.order_by('-id').first()
-    if request.user.is_authenticated:
-        cart_count = cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    cart_count = 0
+    try:
+        if request.user.is_authenticated:
+            cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    except Exception as e:
+        print(f"Cart count error: {e}")
+        cart_count = 0
     context = {
-        'mango_products': mango_products, 
-        'lemon_products': lemon_products,
-        'mixed_products': mixed_products, 
-        'panjabi_products': panjabi_products, 
-        'kerda_products': kerda_products, 
-        'carrot_products': carrot_products,
+        # 'mango_products': mango_products, 
+        # 'lemon_products': lemon_products,
+        # 'mixed_products': mixed_products, 
+        # 'panjabi_products': panjabi_products, 
+        # 'kerda_products': kerda_products, 
+        # 'carrot_products': carrot_products,
         'cart_count': cart_count,
     }
-    return render(request, 'home.html', context)
+    return render(request, 'home.html',context)
 
 def mango(request):
     mango_products = MangoProduct.objects.all()
-    return render(request, 'mango.html', {'mango_products': mango_products})
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'mango_products': mango_products, 
+        'cart_count': cart_count,
+    }
+    return render(request, 'mango.html', context)
 
 def Lemon(request):
     lemon_products = LemonProduct.objects.all()
-    return render(request,'Lemon.html', {'lemon_products': lemon_products})
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'lemon_products': lemon_products,
+        'cart_count': cart_count,
+    }
+    return render(request,'Lemon.html', context)
 
 def Mixed(request):
     mixed_products = MixedProduct.objects.all()
-    return render(request,'Mixed.html', {'mixed_products': mixed_products})
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'mixed_products': mixed_products, 
+        'cart_count': cart_count,
+    }
+    return render(request,'Mixed.html', context)
 
 def Panjabi(request):
     panjabi_products = PanjabiProduct.objects.all()
-    return render(request,'Panjabi.html', {'panjabi_products': panjabi_products})
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'panjabi_products': panjabi_products, 
+        'cart_count': cart_count,
+    }
+    return render(request,'Panjabi.html', context)
 
 def kerda(request):
     kerda_products = KerdaProduct.objects.all()
-    return render(request,'kerda.html', {'kerda_products': kerda_products})
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = { 
+        'kerda_products': kerda_products, 
+        'cart_count': cart_count,
+    }
+    return render(request,'kerda.html', context)
 
 def Carrot(request):
     carrot_products = CarrotProduct.objects.all()
-    return render(request,'Carrot.html', {'carrot_products': carrot_products})
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'carrot_products': carrot_products,
+        'cart_count': cart_count,
+    }
+    return render(request,'Carrot.html', context)
 
 def howwe(request):
-    return render(request,'howwe.html')
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request,'howwe.html',context)
 
 def makeour(request):
-    return render(request,'makeour.html')
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request,'makeour.html',context)
 
 def products(request):
-    return render(request,'products.html')
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request,'products.html',context)
 
 def blogs(request):
-    return render(request,'blogs.html')
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request,'blogs.html',context)
 
 def Contact(request):
-    return render(request,'Contact.html')
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request,'Contact.html',context)
 
 def createaccount(request):
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
     if request.method == 'POST':
         full_name = request.POST['full_name']
         email = request.POST['email']
         phone_number = request.POST['phone_number']
         password = request.POST['password']
-         
-        if CustomUser.objects.filter(email=email).exists():
-            messages.error(request,'This email Already exists')
-            return render(request,'createaccount.html')
         
-        created = CustomUser.objects.create(full_name=full_name,email=email, phone_number = phone_number)
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request, 'This email already exists')
+            return render(request, 'createaccount.html')
+
+        created = CustomUser.objects.create(full_name=full_name, email=email, phone_number=phone_number)
         created.set_password(password)
         created.save()
-        messages.success(request,'Account created Successfully..')
-        return redirect("home")  
-    return render(request,'createaccount.html')
+
+        # Instead of redirect, render with a flag
+        return render(request, 'createaccount.html', {'signup_success': True})
+
+    return render(request, 'createaccount.html',context)
+
 
 def password(request):
     return render(request,'password.html')
 
-def login(request):
-    if request.method == 'POST':  
-        email = request.POST['email']
-        print(email)
-        password = request.POST['password']
-
-        if not email:
-            messages.error(request, 'Email is required')
-            return render(request, 'home.html')
+@csrf_exempt
+def send_otp(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)  
+            email = data.get('email')
         
-        if not password:
-            messages.error(request, 'Password is required')
-            return render(request, 'home.html')
+            if not email:
+                return JsonResponse({'status': 'Email not provided'}, status=400)
 
-        user_data = authenticate(email=email, password=password)
-        if user_data:
-            auth_login(request, user_data)
-            messages.success(request, 'Login successful')
-            return render(request, 'home.html')
+            # Check if user exists
+            user = CustomUser.objects.filter(email=email).first()
+            if not user:
+                return JsonResponse({'status': 'Email not found'}, status=400)
 
-        if not CustomUser.objects.filter(email=email).exists():
-            messages.error(request, 'Invalid email or password')
-            return render(request, 'home.html')
+            # Generate and store OTP in session
+            otp = str(random.randint(1000, 9999))
+            request.session['otp'] = otp
+            request.session['otp_email'] = email  # Optional: tie OTP to email
 
-    return render(request, 'home.html')
+            # Send email using Django's email backend
+            send_mail(
+                subject='Password Reset OTP',
+                message=f'Your OTP for password reset is: {otp}',
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+            return JsonResponse({'status': 'OTP sent successfully'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'Invalid JSON data'}, status=400)
+        except Exception as e:
+            print("Error sending email:", e)
+            return JsonResponse({'status': 'Internal server error'}, status=500)
+
+    return JsonResponse({'status': 'Invalid request method'}, status=400)
+
+# Verify OTP
+def verify_otp(request):
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        session_otp = request.session.get('otp')
+
+        if entered_otp == session_otp:
+            return JsonResponse({'status': 'OTP verified'})
+        else:
+            return JsonResponse({'status': 'Invalid OTP'}, status=400)
+
+# Reset password
+def reset_password(request):
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password == confirm_password:
+            user = request.user  # Assuming the user is logged in or you can use email to get user
+            user.set_password(new_password)
+            user.save()
+            return JsonResponse({'status': 'Password reset successfully'})
+        else:
+            return JsonResponse({'status': 'Passwords do not match'}, status=400)
+
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            user = CustomUser.objects.get(email=email)
+            user = authenticate(request, email=user.email, password=password)
+
+            if user is not None:
+                login(request, user)
+                return render(request, 'login.html', {'login_success': True})
+            else:
+                messages.error(request, 'Invalid email or password.')
+                return redirect('login')
+        except CustomUser.DoesNotExist:
+            messages.error(request, 'Invalid email or password.')
+            return redirect('login')
+
+    return render(request, 'login.html')
+
 
 def logout_view(request):
     logout(request)
     return redirect('home')  
 
+# def checkout(request):
+#     cart_count = 0
+#     if request.user.is_authenticated:
+#         cart_count = CartItem.objects.filter(cart__user=request.user).count()
+#     context = {
+#         'cart_count': cart_count,
+#     }
+#     return render(request,'checkout.html',context)
+
+# def checkout(request):
+#     user = request.user
+#     cart, created = Cart.objects.get_or_create(user=user)
+#     cart_items = cart.items.all()
+
+#     cart_count = 0
+#     if user.is_authenticated:
+#         cart_count = CartItem.objects.filter(cart__user=user).count()
+
+#     total_price = sum(item.total_price() for item in cart_items)
+
+#     context = {
+#         'cart': cart,
+#         'cart_items': cart_items,
+#         'total_price': total_price,
+#         'cart_count': cart_count,
+#     }
+#     return render(request, 'checkout.html', context)
+
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.conf import settings
+from django.shortcuts import render
+from .models import Cart, CartItem, ContactUs  # Ensure ContactUs model is appropriate for storing this data
+
 def checkout(request):
-    return render(request,'checkout.html')
+    user = request.user
+    cart, created = Cart.objects.get_or_create(user=user)
+    cart_items = cart.items.all()
+    
+    cart_count = cart_items.count()
+    total_price = sum(item.total_price() for item in cart_items)
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        phone = request.POST.get('phone')
+        payment_method = request.POST.get('payment_method')
+
+        if not all([name, email, address, city, phone, payment_method]):
+            messages.error(request, 'All fields are required.')
+            return render(request, 'checkout.html', {
+                'cart': cart,
+                'cart_items': cart_items,
+                'total_price': total_price,
+                'cart_count': cart_count,
+            })
+
+        # Save contact/order record
+        contact = ContactUs.objects.create(
+            name=name,
+            email=email,
+            subject='New Order',
+            message=f"Address: {address}\nCity: {city}\nPhone: {phone}\nPayment: {payment_method}"
+        )
+        contact.save()
+
+        # Order Summary for email
+        order_summary = "\n".join(
+            [f"{item.product.name} x {item.quantity} = ₹{item.total_price()}" for item in cart_items]
+        )
+
+        # Email to customer
+        customer_msg = f"""
+        Dear {name},
+
+        Thank you for your order!
+
+        Order Summary:
+        {order_summary}
+
+        Total Price: ₹{total_price}
+        Payment Method: {payment_method}
+
+        Your order will be delivered to:
+        {address}, {city}
+        Phone: {phone}
+
+        We appreciate your business.
+        Thank you and visit again!
+
+        - The Team
+        """
+
+        send_mail(
+            subject="Thank you for your order!",
+            message=customer_msg,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+            fail_silently=False
+        )
+
+        # Email to admin
+        admin_msg = f"""
+        New Order Received:
+
+        Customer: {name}
+        Email: {email}
+        Phone: {phone}
+        Address: {address}, {city}
+        Payment Method: {payment_method}
+
+        Order Summary:
+        {order_summary}
+
+        Total: ₹{total_price}
+        """
+
+        send_mail(
+            subject="New Order Notification",
+            message=admin_msg,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[settings.EMAIL_HOST_USER],
+            fail_silently=False
+        )
+
+        messages.success(request, 'Order placed successfully and confirmation email sent.')
+    
+    context = {
+        'cart': cart,
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'cart_count': cart_count,
+    }
+    return render(request, 'checkout.html', context)
+
+
+
 
 def contact_view(request):
     if request.method == 'POST':
@@ -162,10 +453,11 @@ def contact_view(request):
     messages.success(request,'somthing went wrong')
     return render(request, 'Contact.html')
 
-from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponseBadRequest
-
 def add_to_cart(request, product_type, product_id):
+    user = request.user
+    if not user.is_authenticated:
+        messages.error(request, "You must be logged in to add items to the cart.")
+        return redirect('createaccount')
     if request.method != "POST":
         return HttpResponseBadRequest("Invalid request method")
 
@@ -173,7 +465,6 @@ def add_to_cart(request, product_type, product_id):
     if size not in ['250g', '500g', '1kg']:
         return HttpResponseBadRequest("Invalid size")
 
-    # Normalize product type to lowercase
     product_type = product_type.lower()
 
     product_model_map = {
@@ -213,14 +504,10 @@ def add_to_cart(request, product_type, product_id):
     messages.success(request, f"{product.name} ({size}) added to your cart!")
     return redirect('cart')
 
-
-
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     cart_item.delete()
     return redirect('cart')
-
-from django.http import JsonResponse
 
 def get_cart_items(request, product):
     cart, _ = Cart.objects.get_or_create(user=request.user)
@@ -260,88 +547,30 @@ def get_cart_items(request, product):
         "cart_count": cart.items.count()
     })
 
-# from django.http import JsonResponse
-# from .models import Cart
-# from django.contrib.contenttypes.models import ContentType
-
-# def get_cart_items(request):
-#     cart, _ = Cart.objects.get_or_create(user=request.user)
-#     items = cart.items.select_related('content_type')  # Optimized
-
-#     cart_items_data = []
-#     total_price = 0
-
-#     for item in items:
-#         product = item.product  # Access the actual product via GenericForeignKey
-
-#         if not product:
-#             continue  # Skip broken/missing products
-
-#         # Dynamically get all prices safely
-#         price_250g = getattr(product, 'price_250g', None)
-#         price_500g = getattr(product, 'price_500g', None)
-#         price_1kg = getattr(product, 'price_1kg', None)
-
-#         # You can use item.size or item.quantity to choose price, here example assumes size
-#         # Let's assume item has `size` field: "250g", "500g", "1kg"
-#         if hasattr(item, 'size'):
-#             if item.size == '250g':
-#                 price = price_250g
-#             elif item.size == '500g':
-#                 price = price_500g
-#             elif item.size == '1kg':
-#                 price = price_1kg
-#             else:
-#                 price = price_250g  # default fallback
-#         else:
-#             price = price_250g  # default if no size field exists
-
-#         # Ensure price is not None
-#         if price is None:
-#             continue
-
-#         item_total = price * item.quantity
-#         total_price += item_total
-
-#         cart_items_data.append({
-#             'id': item.id,
-#             'name': getattr(product, 'name', 'Unnamed'),
-#             'image': product.image.url if getattr(product, 'image', None) else '',
-#             'price': item.price,
-#             'quantity': item.quantity,
-#             'size': getattr(item, 'size', '250g'),
-#             'total_price': item_total
-#         })
-
-#     return JsonResponse({
-#         'cart_items': cart_items_data,
-#         'total_price': total_price
-#     })
-
-    
-# def view_cart(request):
-#     user = request.user
-#     cart, created = Cart.objects.get_or_create(user=user)
-#     cart_items = cart.items.all()
-#     # total_price = sum(item.total_price() for item in cart_items)
-#     context = {
-#         'cart': cart,
-#         'cart_items': cart_items,
-#         # 'total_price': total_price,
-#     }
-#     return render(request, 'cart.html', context)
-
 def view_cart(request):
     user = request.user
     cart, created = Cart.objects.get_or_create(user=user)
     cart_items = cart.items.all()
-
-    # Correct usage of method
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    
     total_price = sum(item.total_price() for item in cart_items)
 
     context = {
         'cart': cart,
         'cart_items': cart_items,
-        'total_price': total_price,
+        'total_price': total_price,        
+        'cart_count': cart_count,
     }
     return render(request, 'cart.html', context)
+
+def update_quantity(request, item_id, quantity):
+    try:
+        item = CartItem.objects.get(id=item_id)
+        item.quantity = quantity
+        item.save()
+        return JsonResponse({'success': True})
+    except CartItem.DoesNotExist:
+        return JsonResponse({'success': False}, status=404)
+

@@ -17,11 +17,17 @@ urlpatterns = [
     path('createaccount/',createaccount,name='createaccount'),
     path('checkout/',checkout,name='checkout'),
     path('password/',password,name='password'),
-    path('login',login,name='login'),
+    path('login',login_view,name='login'),
     path('contact/', contact_view, name='contact'),
     path('logout',logout_view,name='logout'),
     path('cart/', view_cart, name='cart'), 
     path('add-to-cart/<str:product_type>/<int:product_id>/', add_to_cart, name='add_to_cart'),
     path('get-cart-items/', get_cart_items, name='get_cart_items'),
     path('cart/remove/<int:item_id>/', remove_from_cart, name='remove_from_cart'),
+    path('update-quantity/<int:item_id>/<int:quantity>/', update_quantity, name='update_quantity'),
+    path('password/', password, name='password'),
+    path('send_otp/', send_otp, name='send_otp'),
+    path('verify_otp/', verify_otp, name='verify_otp'),
+    path('reset_password/', reset_password, name='reset_password'),
+
 ]

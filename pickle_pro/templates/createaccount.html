@@ -4,7 +4,7 @@
 
 <div class="container p-4 bg-white shadow rounded mt-5 mb-5" style="max-width: 350px;">
     <h2 class="text-center mb-3">Sign Up</h2>
-    <form method="post" action="{% url 'createaccount' %}" onsubmit="return handleSignup(event)">
+    <form method="post" action="{% url 'createaccount' %}">
         {% csrf_token %}
         <div class="mb-3">
             <label class="form-label">Fullname:</label>
@@ -28,11 +28,22 @@
         </div>
     
         <button type="submit" class="btn account w-100">Sign Up</button>
+
+        {% if signup_success %}
+        <script>
+            alert("Sign-up successful! Please log in.");
+            window.location.href = "{% url 'login' %}";
+        </script>
+        {% endif %}
+
+        <div class="text-center mt-3">
+            <a href="{% url 'login' %}" class="d-block">Login</a>
+        </div>
     </form>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+{% comment %} <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,7 +58,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> {% endcomment %}
 <script>
     function handleSignup(event) {
         event.preventDefault(); // Prevent default form submission
@@ -67,17 +78,12 @@
             // Clear any previous error message
             document.getElementById("signup-error").innerText = "";
     
-            // Show an alert box
-            alert("Sign-up successful! Please log in.");
-    
-            // Open the sidebar (offcanvas)
-            let offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
-            offcanvas.show();
+
     
             // Optionally, reset the form after successful submission
             document.querySelector("form").reset();
         }
     }
     </script>
-
+    
 {% endblock main-content %}

@@ -279,7 +279,6 @@ h1, h2, h3, h4, h5, h6{
 	padding: 9px 15px!important;
 	box-shadow: 0px 1px 5px 0px #d72b2b;
 	margin-top: 6px;
-	margin-left: 5px;
 	margin-bottom: 5px;
 }
 
@@ -288,7 +287,7 @@ h1, h2, h3, h4, h5, h6{
 	color: #fff;
 	text-align: center;
 	border-radius: 5px;
-	padding: 10px 15px!important;
+	padding: 9px 15px!important;
     text-decoration: none;
     margin-left: 5px;
 	margin-bottom: 5px;
@@ -654,7 +653,7 @@ footer table thead tr th,td{
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .quantity-selector button {
-	background: #f8a100;
+	background: #de941e;
 	border: none;
 	padding: 8px 12px;
 	color: white;
@@ -864,4 +863,45 @@ form button {
 	font-size: 1.2em;
 	margin-top: 20px;
 	font-weight: bold;
+}
+
+.input-group .btn {
+	width: 32px;
+	padding: 0;
+}
+.input-group input {
+	max-width: 40px;
+}
+
+.table td img {
+	max-width: 50px;
+	height: auto;
+}
+.input-group .btn {
+	width: 32px;
+	padding: 0;
+}
+.input-group input {
+	max-width: 40px;
+}
+.cart-container {
+	padding: 30px 15px;
+}
+
+.ta{
+	background-color: #de941e !important;
+	background-color: #de941e !important;
+}
+
+.taa{
+	background-color: #f4ab3685 !important;
+}
+
+.tot{
+	background-color: #b5c33d !important;
+	padding-left: 20px;
+}
+
+.cen{
+	text-align: center!important;
 }
