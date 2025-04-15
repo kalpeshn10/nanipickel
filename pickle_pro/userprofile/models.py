@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
@@ -57,6 +58,7 @@ class MangoProduct(models.Model):
     price_500g = models.PositiveIntegerField() 
     price_1kg = models.PositiveIntegerField()  
     description = models.TextField(blank=True)  
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -67,7 +69,8 @@ class LemonProduct(models.Model):
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
     price_1kg = models.PositiveIntegerField()  
-    description = models.TextField(blank=True)  
+    description = models.TextField(blank=True) 
+    is_available = models.BooleanField(default=True) 
 
     def __str__(self):
         return self.name
@@ -78,7 +81,8 @@ class MixedProduct(models.Model):
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
     price_1kg = models.PositiveIntegerField()  
-    description = models.TextField(blank=True)  
+    description = models.TextField(blank=True)
+    is_available = models.BooleanField(default=True)  
 
     def __str__(self):
         return self.name
@@ -90,7 +94,8 @@ class PanjabiProduct(models.Model):
     price_500g = models.PositiveIntegerField() 
     price_1kg = models.PositiveIntegerField()  
     description = models.TextField(blank=True)  
-
+    is_available = models.BooleanField(default=True)
+    
     def __str__(self):
         return self.name
  
@@ -100,7 +105,8 @@ class KerdaProduct(models.Model):
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
     price_1kg = models.PositiveIntegerField()  
-    description = models.TextField(blank=True)  
+    description = models.TextField(blank=True)
+    is_available = models.BooleanField(default=True)  
 
     def __str__(self):
         return self.name
@@ -111,7 +117,8 @@ class CarrotProduct(models.Model):
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
     price_1kg = models.PositiveIntegerField()  
-    description = models.TextField(blank=True)  
+    description = models.TextField(blank=True)
+    is_available = models.BooleanField(default=True)  
 
     def __str__(self):
         return self.name
@@ -119,22 +126,7 @@ class CarrotProduct(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True,blank=True)
     
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
-
-# class CartItem(models.Model):
-#     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE,null=True,blank=True)
-#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,null=True,blank=True)
-#     object_id = models.PositiveIntegerField(null=True,blank=True)
-#     product = GenericForeignKey('content_type', 'object_id')
-#     quantity = models.PositiveIntegerField(default=1,null=True,blank=True)
-
-#     def total_price(self):
-#         try:
-#             return self.quantity * self.product.price_250g
-#         except AttributeError:
-#             return 0
-
+    
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items',null=True,blank=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,null=True,blank=True)
@@ -148,4 +140,21 @@ class CartItem(models.Model):
     def total_price(self):
         return (self.price or 0) * self.quantity 
 
-        
+
+class Checkout(models.Model):
+    PAYMENT_CHOICES = [
+        ('Cash On Delivery', 'Cash On Delivery'),
+        ('PayPal', 'PayPal'),
+    ]
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True,blank=True)
+    first_name = models.CharField(max_length=100,null=True,blank=True)
+    last_name = models.CharField(max_length=100,null=True,blank=True)
+    email = models.CharField(null=True,blank=True)
+    mobile = models.CharField(max_length=100,null=True,blank=True)
+    address = models.TextField(null=True,blank=True)
+    city = models.CharField(max_length=100,null=True,blank=True)
+    state = models.CharField(max_length=100,null=True,blank=True)
+    zip_code = models.CharField(max_length=100,null=True,blank=True)
+    payment_method = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default='Cash On Delivery',null=True,blank=True)
+    total = models.DecimalField(max_digits=100, decimal_places=2,null=True,blank=True)
+    product = models.ManyToManyField(Product)

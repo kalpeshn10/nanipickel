@@ -17,12 +17,13 @@ import json
 import ipdb
 
 def home(request):
-    mango_products = MangoProduct.objects.order_by('-id').first()
-    lemon_products = LemonProduct.objects.order_by('-id').first()
-    mixed_products = MixedProduct.objects.order_by('-id').first()
-    panjabi_products = PanjabiProduct.objects.order_by('-id').first()
-    kerda_products = KerdaProduct.objects.order_by('-id').first()
-    carrot_products = CarrotProduct.objects.order_by('-id').first()
+    mango_product = MangoProduct.objects.order_by('-id').first()
+    lemon_product = LemonProduct.objects.order_by('-id').first()
+    mixed_product = MixedProduct.objects.order_by('-id').first()
+    panjabi_product = PanjabiProduct.objects.order_by('-id').first()
+    kerda_product = KerdaProduct.objects.order_by('-id').first()
+    carrot_product = CarrotProduct.objects.order_by('-id').first()
+
     cart_count = 0
     try:
         if request.user.is_authenticated:
@@ -30,19 +31,22 @@ def home(request):
     except Exception as e:
         print(f"Cart count error: {e}")
         cart_count = 0
+
     context = {
-        # 'mango_products': mango_products, 
-        # 'lemon_products': lemon_products,
-        # 'mixed_products': mixed_products, 
-        # 'panjabi_products': panjabi_products, 
-        # 'kerda_products': kerda_products, 
-        # 'carrot_products': carrot_products,
+        'mango_products': [mango_product] if mango_product else [],
+        'lemon_products': [lemon_product] if lemon_product else [],
+        'mixed_products': [mixed_product] if mixed_product else [],
+        'panjabi_products': [panjabi_product] if panjabi_product else [],
+        'kerda_products': [kerda_product] if kerda_product else [],
+        'carrot_products': [carrot_product] if carrot_product else [],
         'cart_count': cart_count,
     }
-    return render(request, 'home.html',context)
+
+    return render(request, 'home.html', context)
 
 def mango(request):
     mango_products = MangoProduct.objects.all()
+    mango_products = MangoProduct.objects.filter(is_available=True)
     cart_count = 0
     if request.user.is_authenticated:
         cart_count = CartItem.objects.filter(cart__user=request.user).count()
@@ -54,6 +58,7 @@ def mango(request):
 
 def Lemon(request):
     lemon_products = LemonProduct.objects.all()
+    lemon_products = LemonProduct.objects.filter(is_available=True)
     cart_count = 0
     if request.user.is_authenticated:
         cart_count = CartItem.objects.filter(cart__user=request.user).count()
@@ -65,6 +70,7 @@ def Lemon(request):
 
 def Mixed(request):
     mixed_products = MixedProduct.objects.all()
+    mixed_products = MixedProduct.objects.filter(is_available=True)
     cart_count = 0
     if request.user.is_authenticated:
         cart_count = CartItem.objects.filter(cart__user=request.user).count()
@@ -76,6 +82,7 @@ def Mixed(request):
 
 def Panjabi(request):
     panjabi_products = PanjabiProduct.objects.all()
+    panjabi_products = PanjabiProduct.objects.filter(is_available=True)
     cart_count = 0
     if request.user.is_authenticated:
         cart_count = CartItem.objects.filter(cart__user=request.user).count()
@@ -87,6 +94,7 @@ def Panjabi(request):
 
 def kerda(request):
     kerda_products = KerdaProduct.objects.all()
+    kerda_products = KerdaProduct.objects.filter(is_available=True)
     cart_count = 0
     if request.user.is_authenticated:
         cart_count = CartItem.objects.filter(cart__user=request.user).count()
@@ -98,6 +106,7 @@ def kerda(request):
 
 def Carrot(request):
     carrot_products = CarrotProduct.objects.all()
+    carrot_products = CarrotProduct.objects.filter(is_available=True)
     cart_count = 0
     if request.user.is_authenticated:
         cart_count = CartItem.objects.filter(cart__user=request.user).count()
@@ -272,34 +281,6 @@ def logout_view(request):
     logout(request)
     return redirect('home')  
 
-# def checkout(request):
-#     cart_count = 0
-#     if request.user.is_authenticated:
-#         cart_count = CartItem.objects.filter(cart__user=request.user).count()
-#     context = {
-#         'cart_count': cart_count,
-#     }
-#     return render(request,'checkout.html',context)
-
-# def checkout(request):
-#     user = request.user
-#     cart, created = Cart.objects.get_or_create(user=user)
-#     cart_items = cart.items.all()
-
-#     cart_count = 0
-#     if user.is_authenticated:
-#         cart_count = CartItem.objects.filter(cart__user=user).count()
-
-#     total_price = sum(item.total_price() for item in cart_items)
-
-#     context = {
-#         'cart': cart,
-#         'cart_items': cart_items,
-#         'total_price': total_price,
-#         'cart_count': cart_count,
-#     }
-#     return render(request, 'checkout.html', context)
-
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.conf import settings
@@ -332,7 +313,7 @@ def checkout(request):
             })
 
         # Save contact/order record
-        contact = ContactUs.objects.create(
+        contact = Checkout.objects.create(
             name=name,
             email=email,
             subject='New Order',
