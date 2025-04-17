@@ -52,7 +52,7 @@ class ContactUs(models.Model):
 
 
 class MangoProduct(models.Model):
-    name = models.CharField(max_length=100)  
+    name = models.CharField(max_length=100, default='Unnamed')  
     image = models.ImageField(upload_to='static/assets/images')  
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
@@ -64,7 +64,7 @@ class MangoProduct(models.Model):
         return self.name
     
 class LemonProduct(models.Model):
-    name = models.CharField(max_length=100)  
+    name = models.CharField(max_length=100, default='Unnamed')  
     image = models.ImageField(upload_to='static/assets/images')  
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
@@ -76,7 +76,7 @@ class LemonProduct(models.Model):
         return self.name
 
 class MixedProduct(models.Model):
-    name = models.CharField(max_length=100)  
+    name = models.CharField(max_length=100, default='Unnamed')  
     image = models.ImageField(upload_to='static/assets/images')  
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
@@ -88,7 +88,7 @@ class MixedProduct(models.Model):
         return self.name
  
 class PanjabiProduct(models.Model):
-    name = models.CharField(max_length=100)  
+    name = models.CharField(max_length=100, default='Unnamed')  
     image = models.ImageField(upload_to='static/assets/images')  
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
@@ -100,7 +100,7 @@ class PanjabiProduct(models.Model):
         return self.name
  
 class KerdaProduct(models.Model):
-    name = models.CharField(max_length=100)  
+    name = models.CharField(max_length=100, default='Unnamed')  
     image = models.ImageField(upload_to='static/assets/images')  
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
@@ -112,7 +112,7 @@ class KerdaProduct(models.Model):
         return self.name
 
 class CarrotProduct(models.Model):
-    name = models.CharField(max_length=100)  
+    name = models.CharField(max_length=100, default='Unnamed')  
     image = models.ImageField(upload_to='static/assets/images')  
     price_250g = models.PositiveIntegerField() 
     price_500g = models.PositiveIntegerField() 
@@ -141,16 +141,30 @@ class CartItem(models.Model):
         return (self.price or 0) * self.quantity 
 
 
+# class Checkout(models.Model):
+#     PAYMENT_CHOICES = [
+#         ('Cash On Delivery', 'Cash On Delivery'),
+#         ('PayPal', 'PayPal'),
+#     ]
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True,blank=True)
+#     full_name = models.CharField(max_length=100,null=True,blank=True)
+#     email = models.CharField(null=True,blank=True)
+#     mobile = models.CharField(max_length=100,null=True,blank=True)
+#     address = models.TextField(null=True,blank=True)
+#     city = models.CharField(max_length=100,null=True,blank=True)
+#     state = models.CharField(max_length=100,null=True,blank=True)
+#     zipcode = models.CharField(max_length=100,null=True,blank=True)
+#     payment_method = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default='Cash On Delivery',null=True,blank=True)
+#     total = models.DecimalField(max_digits=100, decimal_places=2,null=True,blank=True)
+#     product = models.ManyToManyField(Product)
+    
 class Checkout(models.Model):
     PAYMENT_CHOICES = [
         ('Cash On Delivery', 'Cash On Delivery'),
         ('PayPal', 'PayPal'),
     ]
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True,blank=True)
-    first_name = models.CharField(max_length=100,null=True,blank=True)
-    last_name = models.CharField(max_length=100,null=True,blank=True)
-    email = models.CharField(null=True,blank=True)
-    mobile = models.CharField(max_length=100,null=True,blank=True)
+    full_name = models.CharField(max_length=100,null=True,blank=True)
+    email = models.EmailField(null=True,blank=True)
     address = models.TextField(null=True,blank=True)
     city = models.CharField(max_length=100,null=True,blank=True)
     state = models.CharField(max_length=100,null=True,blank=True)

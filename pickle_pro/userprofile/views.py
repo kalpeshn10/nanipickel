@@ -12,6 +12,12 @@ from django.http import HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from .models import CustomUser
+from django.core.mail import send_mail
+from .models import Cart, CartItem, ContactUs 
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import CustomUser
 import random
 import json
 import ipdb
@@ -193,67 +199,60 @@ def password(request):
 
 @csrf_exempt
 def send_otp(request):
-    if request.method == 'POST':
+    if request.method == "POST":
+        data = json.loads(request.body)
+        email = data.get('email')
+
         try:
-            data = json.loads(request.body)  
-            email = data.get('email')
-        
-            if not email:
-                return JsonResponse({'status': 'Email not provided'}, status=400)
+            user = CustomUser.objects.get(email=email)
+            otp = str(random.randint(100000, 999999))
+            user.otp = otp
+            user.save()
 
-            # Check if user exists
-            user = CustomUser.objects.filter(email=email).first()
-            if not user:
-                return JsonResponse({'status': 'Email not found'}, status=400)
-
-            # Generate and store OTP in session
-            otp = str(random.randint(1000, 9999))
-            request.session['otp'] = otp
-            request.session['otp_email'] = email  # Optional: tie OTP to email
-
-            # Send email using Django's email backend
+            # Send email
             send_mail(
-                subject='Password Reset OTP',
-                message=f'Your OTP for password reset is: {otp}',
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email],
+                'Your OTP Code',
+                f'Your OTP is: {otp}',
+                'noreply@example.com',
+                [email],
                 fail_silently=False,
             )
 
-            return JsonResponse({'status': 'OTP sent successfully'})
+            return JsonResponse({'status': 'OTP sent'})
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'status': 'Email not found'}, status=404)
 
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'Invalid JSON data'}, status=400)
-        except Exception as e:
-            print("Error sending email:", e)
-            return JsonResponse({'status': 'Internal server error'}, status=500)
-
-    return JsonResponse({'status': 'Invalid request method'}, status=400)
-
-# Verify OTP
+@csrf_exempt
 def verify_otp(request):
-    if request.method == 'POST':
-        entered_otp = request.POST.get('otp')
-        session_otp = request.session.get('otp')
+    if request.method == "POST":
+        data = json.loads(request.body)
+        otp = data.get('otp')
 
-        if entered_otp == session_otp:
+        try:
+            user = CustomUser.objects.get(otp=otp)
             return JsonResponse({'status': 'OTP verified'})
-        else:
+        except CustomUser.DoesNotExist:
             return JsonResponse({'status': 'Invalid OTP'}, status=400)
 
-# Reset password
+@csrf_exempt
 def reset_password(request):
-    if request.method == 'POST':
-        new_password = request.POST.get('new_password')
-        confirm_password = request.POST.get('confirm_password')
+    if request.method == "POST":
+        data = json.loads(request.body)
+        new_password = data.get('new_password')
+        confirm_password = data.get('confirm_password')
 
-        if new_password == confirm_password:
-            user = request.user  # Assuming the user is logged in or you can use email to get user
+        if new_password != confirm_password:
+            return JsonResponse({'status': 'Passwords do not match'}, status=400)
+
+        otp = data.get('otp')
+        try:
+            user = CustomUser.objects.get(otp=otp)
             user.set_password(new_password)
+            user.otp = None
             user.save()
             return JsonResponse({'status': 'Password reset successfully'})
-        else:
-            return JsonResponse({'status': 'Passwords do not match'}, status=400)
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'status': 'Invalid OTP'}, status=400)
 
 def login_view(request):
     if request.method == 'POST':
@@ -281,11 +280,11 @@ def logout_view(request):
     logout(request)
     return redirect('home')  
 
-from django.core.mail import send_mail
+from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.conf import settings
-from django.shortcuts import render
-from .models import Cart, CartItem, ContactUs  # Ensure ContactUs model is appropriate for storing this data
+from .models import Cart, Checkout
 
 def checkout(request):
     user = request.user
@@ -296,71 +295,81 @@ def checkout(request):
     total_price = sum(item.total_price() for item in cart_items)
 
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
+        full_name = request.POST.get('name') or user.full_name
+        email = request.POST.get('email') or user.email
         address = request.POST.get('address')
         city = request.POST.get('city')
-        phone = request.POST.get('phone')
+        phone = request.POST.get('phone') or user.phone_number
         payment_method = request.POST.get('payment_method')
 
-        if not all([name, email, address, city, phone, payment_method]):
+        if not all([full_name, email, address, city, phone, payment_method]):
             messages.error(request, 'All fields are required.')
             return render(request, 'checkout.html', {
                 'cart': cart,
                 'cart_items': cart_items,
                 'total_price': total_price,
                 'cart_count': cart_count,
+                'user': user
             })
 
-        # Save contact/order record
-        contact = Checkout.objects.create(
-            name=name,
+        # Save checkout data
+        checkout = Checkout.objects.create(
+            full_name=full_name,
             email=email,
-            subject='New Order',
-            message=f"Address: {address}\nCity: {city}\nPhone: {phone}\nPayment: {payment_method}"
+            address=address,
+            city=city,
+            phone=phone,
+            payment_method=payment_method
         )
-        contact.save()
+        for item in cart_items:
+            checkout.products.add(item.product)  # lowercase 'product'
 
-        # Order Summary for email
+
+        cart.items.all().delete()
+        cart.delete()
+
+        # Order summary
         order_summary = "\n".join(
-            [f"{item.product.name} x {item.quantity} = ₹{item.total_price()}" for item in cart_items]
+            f"{item.quantity} x {item.product.name } (₹{item.total_price()})"
+            for item in cart_items
         )
 
-        # Email to customer
+        # Customer email
         customer_msg = f"""
-        Dear {name},
+        Dear {full_name},
 
         Thank you for your order!
 
-        Order Summary:
+        🛒 Order Summary:
         {order_summary}
 
-        Total Price: ₹{total_price}
-        Payment Method: {payment_method}
+        💰 Total Price: ₹{total_price}
+        💳 Payment Method: {payment_method}
 
-        Your order will be delivered to:
+        📦 Delivery Address:
         {address}, {city}
-        Phone: {phone}
+        📞 Phone: {phone}
 
         We appreciate your business.
-        Thank you and visit again!
+        ✅ Thank you and visit again!
 
         - The Team
         """
 
+        # Send email to customer
         send_mail(
-            subject="Thank you for your order!",
+            subject="✅ Your Order Confirmation",
             message=customer_msg,
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email],
             fail_silently=False
         )
 
-        # Email to admin
+        # Admin notification
         admin_msg = f"""
         New Order Received:
 
-        Customer: {name}
+        Name: {full_name}
         Email: {email}
         Phone: {phone}
         Address: {address}, {city}
@@ -369,29 +378,28 @@ def checkout(request):
         Order Summary:
         {order_summary}
 
-        Total: ₹{total_price}
+        Total Price: ₹{total_price}
         """
 
         send_mail(
-            subject="New Order Notification",
+            subject="📥 New Order Received",
             message=admin_msg,
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[settings.EMAIL_HOST_USER],
             fail_silently=False
         )
 
-        messages.success(request, 'Order placed successfully and confirmation email sent.')
-    
+        messages.success(request, '✅ Order placed successfully. Confirmation sent!')
+        return redirect('home')
+
     context = {
         'cart': cart,
         'cart_items': cart_items,
         'total_price': total_price,
         'cart_count': cart_count,
+        'user': user
     }
     return render(request, 'checkout.html', context)
-
-
-
 
 def contact_view(request):
     if request.method == 'POST':
@@ -555,3 +563,11 @@ def update_quantity(request, item_id, quantity):
     except CartItem.DoesNotExist:
         return JsonResponse({'success': False}, status=404)
 
+def thankyou(request):
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request, 'thankyou.html', context)

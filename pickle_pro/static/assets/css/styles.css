@@ -794,11 +794,6 @@ checkout-container {
 	
 } 
 
-/* h2 {
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
-} */
-
 form input, form textarea {
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -834,7 +829,7 @@ form button {
 }
 
 .pro{
-	margin-right: 30px !important;
+	margin-right: 14px !important;
 }
 
 .cart-container {
@@ -904,4 +899,11 @@ form button {
 
 .cen{
 	text-align: center!important;
+}
+
+.send{
+	background-color: #de941e !important;
+	border: none !important;
+	color: #fff;
+	padding: 10px 244px;
 }
