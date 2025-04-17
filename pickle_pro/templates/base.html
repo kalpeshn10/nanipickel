@@ -137,42 +137,44 @@ function addToCart() {
  <div class="container text-center text-md-start">
    <div class="row">
       <div class="col-lg-7 col-md-12">
-       <table class="table table-borderless text-center text-md-start">
+       <table class="table table-borderless text-center text-md-start mt-4">
          <thead>
            <tr>
              <th>SHOP</th>
+             <th>SHOP</th>
              <th>POLICIES</th>
-             <th>HELP</th>
+             {% comment %} <th>HELP</th> {% endcomment %}
            </tr>
          </thead>
          <tbody>
            <tr>
              <td><a class="dropdown-item" href="{% url 'mango' %}">Mango Pickle</a></td>
+             <td><a class="dropdown-item" href="{% url 'Panjabi' %}">Panjabi Pickle</a></td>
              <td>Terms and Conditions</td>
-             <td>Payments</td>
+            
            </tr>
            <tr>
              <td><a class="dropdown-item" href="{% url 'Lemon' %}">Lemon Pickle</a></td>
+             <td><a class="dropdown-item" href="{% url 'kerda' %}">kerda  Pickle</a></td>
              <td>Privacy Policy</td>
-             <td>Shipping Fees & Delivery</td>
            </tr>
            <tr>
              <td><a class="dropdown-item" href="{% url 'Mixed' %}">Mixed Pickle</a></td>
-             <td></td>
-             <td>Track Order</td>
-           </tr>
-           <tr>
-             <td><a class="dropdown-item" href="{% url 'Panjabi' %}">Panjabi Pickle</a></td>
-             <td></td>
-             <td></td>
-           </tr>
-           <tr>
-             <td><a class="dropdown-item" href="{% url 'kerda' %}">kerda  Pickle</a></td>
-             <td></td>
-             <td></td>
-           </tr>
-           <tr>
              <td><a class="dropdown-item" href="{% url 'Carrot' %}">Carrot Pickle</a></td>
+             <td></td>
+           </tr>
+           <tr>
+            
+             <td></td>
+             <td></td>
+           </tr>
+           <tr>
+             
+             <td></td>
+             <td></td>
+           </tr>
+           <tr>
+             
              <td></td>
              <td></td>
            </tr>
@@ -190,7 +192,7 @@ function addToCart() {
           </a>
         </li>
         <li class="list-inline-item">
-          <a href="#" class="hvr-pulse-grow" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook">
+          <a href="https://www.facebook.com/share/18i9pBpKY1/?mibextid=qi2Omg" class="hvr-pulse-grow" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook">
             <i class="rounded fa-brands fa-facebook"></i>
           </a>
         </li>
@@ -200,7 +202,7 @@ function addToCart() {
           </a>
         </li>
         <li class="list-inline-item">
-          <a href="#" class="hvr-pulse-grow" title="YouTube">
+          <a href="https://www.youtube.com/@acharimaa" class="hvr-pulse-grow" title="YouTube">
             <i class="rounded fa-brands fa-youtube"></i>
           </a>
         </li>
@@ -222,6 +224,7 @@ function addToCart() {
 <script src="{% static '/assets/js/jquery.min.js'%}" type="text/javascript"></script>
 <script src="{% static '/assets/js/owl.carousel.min.js'%}" type="text/javascript"></script>
 <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
 <script type="text/javascript">
  $('.owl-carousel').owlCarousel({
