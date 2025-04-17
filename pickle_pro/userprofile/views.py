@@ -319,10 +319,19 @@ def checkout(request):
             address=address,
             city=city,
             phone=phone,
-            payment_method=payment_method
+            payment_method=payment_method,
+            total=total_price
         )
         for item in cart_items:
-            checkout.products.add(item.product)  # lowercase 'product'
+            product_instance = item.product
+            content_type = ContentType.objects.get_for_model(product_instance)
+            CheckoutProduct.objects.create(
+                checkout=checkout,
+                content_type=content_type,
+                object_id=product_instance.pk,
+                quantity=item.quantity,
+                price=item.total_price()
+            )
 
 
         cart.items.all().delete()
@@ -390,7 +399,7 @@ def checkout(request):
         )
 
         messages.success(request, '✅ Order placed successfully. Confirmation sent!')
-        return redirect('home')
+        return redirect('thankyou')
 
     context = {
         'cart': cart,
