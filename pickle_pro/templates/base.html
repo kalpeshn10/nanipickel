@@ -22,9 +22,21 @@
 </head>
 <body>
     <!------------ navbar start ------------>
-    <div class="container-fuild fixed-top">
+    {% comment %} <div class="container-fuild fixed-top">
      <marquee behavior="scroll" direction="left">Jars ₹999</strong> | Buy any <strong>4 Code: <strong>BUY@999</strong> | Extra <strong>5% OFF</strong> on <strong>Prepaid</strong> orders</marquee>
-   </div>
+   </div> {% endcomment %}
+   
+    <div class="container-fuild fixed-top ">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-12 text-center">
+            <marquee behavior="scroll" direction="left">Jars ₹999</strong> | Buy any <strong>4 Code: <strong>BUY@999</strong> | Extra <strong>5% OFF</strong> on <strong>Prepaid</strong> orders</marquee>
+          </div>
+            <div class="col-12 text-center">
+              <P class="m-0">Welcome, {{ request.user.full_name }} </P>
+            </div>
+        </div>
+    </div>
+
  
    <nav class="navbar navbar-expand-lg mymenu co sticky-top bg-body-tertiary">
        <div class="container">
@@ -95,6 +107,11 @@
                 </button>
               </div>
             </div>
+            {% comment %} <div class="row">
+            <div class="col ">
+              <P class="m-0">Welcome, {{ request.user.full_name }} </P>
+            </div> {% endcomment %}
+            </div>
             {% else %}
             <button class="icon-button ab" type="button" onclick="window.location.href='{% url 'login' %}'">
               <i class="bi bi-person-fill"></i>
@@ -114,6 +131,7 @@
       </div>
     </nav>
 
+
 <script>
 function addToCart() {
     // Example: Simulate adding to cart (you'd use actual data here)
@@ -125,7 +143,8 @@ function addToCart() {
     window.location.href = '{% url 'cart' %}';
 }
 </script>
-  
+
+<!------------ Navbar End ---------------->
 <!------------ TopButton Start ---------------->
 <button id="topBtn" class="btn"><i class="bi bi-arrow-up-circle"></i></button>
 <!------------ TopButton End ---------------->
