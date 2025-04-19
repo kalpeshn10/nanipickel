@@ -2,9 +2,67 @@
 {% block main-content%}
 {% load static %} 
 
+<div class="container-fluid my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 text-center">
+        <div class="heading">
+            <h1>Blogs</h1>
+            <div class="head-sub">
+                <h1>Blogs</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="embed-responsive embed-responsive-16by9">
-  <iframe class="embed-responsive-item video" src="{% static 'assets/images/Video.mp4' %}" allowfullscreen></iframe>
+  <video class="embed-responsive-item video" autoplay muted loop controls>
+    <source src="{% static 'assets/images/Video.mp4' %}" type="video/mp4">g.
+  </video>
 </div> 
 
- 
+  <div class="container section">
+    <div class="row align-items-center">
+      <div class="col-md-7 order-2 order-md-1 text-block">
+        <h4 class="highlight">
+          We don’t just make products — we make legends. Our product isn’t good, it’s the best in the game. 
+          No compromises. 
+        </h4>
+        <p class="custom-text">
+          No second place. We rule the market because we build with power, pride, and perfection. 
+          You want quality? We define it. You want results? We deliver them. Others talk big — we let our product
+           do the talking. Built for winners, by winners. We don’t follow trends — we set them. Once you try us,
+            there’s no going back. We’re not here to compete. We’re here to dominate. Welcome to the top.
+        </p>
+      </div>
+      <div class="col-md-5 order-1 order-md-2 image-box">
+        <video class="embed-responsive-item video" autoplay muted loop controls>
+          <source src="{% static 'assets/images/v1.mp4' %}" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+
+    <div class="row align-items-center">
+      <div class="col-md-5 image-box">
+        <video class="embed-responsive-item video" autoplay muted loop controls>
+          <source src="{% static 'assets/images/v2.mp4' %}" type="video/mp4">.
+        </video>
+      </div>
+      <div class="col-md-7 order-2 order-md-1 text-block">
+        <h4 class="highlight">
+          Homemade mango pickle is a traditional Indian delicacy made using raw mangoes, spices, and oil. 
+        </h4>
+        <p class="custom-text">
+          To prepare it, raw mangoes are washed, chopped, and sun-dried to remove moisture. 
+          They are then mixed with mustard seeds, fenugreek, turmeric, red chili powder, salt, and asafoetida. 
+          The mixture is soaked in mustard oil, sealed in a jar, and kept in sunlight for several days to enhance 
+          the flavor. This tangy and spicy pickle adds a delicious touch to any meal. It can be stored for months 
+          and is enjoyed with rice, chapati, or paratha. Making it at home ensures purity and taste.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% endblock main-content%}

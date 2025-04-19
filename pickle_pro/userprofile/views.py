@@ -29,7 +29,8 @@ def home(request):
     panjabi_product = PanjabiProduct.objects.order_by('-id').first()
     kerda_product = KerdaProduct.objects.order_by('-id').first()
     carrot_product = CarrotProduct.objects.order_by('-id').first()
-
+    # images = CarouselImage.objects.all() 
+    
     cart_count = 0
     try:
         if request.user.is_authenticated:
@@ -46,6 +47,7 @@ def home(request):
         'kerda_products': [kerda_product] if kerda_product else [],
         'carrot_products': [carrot_product] if carrot_product else [],
         'cart_count': cart_count,
+        # 'images': images,
     }
 
     return render(request, 'home.html', context)
@@ -286,11 +288,142 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Cart, Checkout
 
+# def checkout(request):
+#     user = request.user
+#     cart, created = Cart.objects.get_or_create(user=user)
+#     cart_items = cart.items.all()
+    
+#     cart_count = cart_items.count()
+#     total_price = sum(item.total_price() for item in cart_items)
+
+#     if request.method == 'POST':
+#         full_name = request.POST.get('name') or user.full_name
+#         email = request.POST.get('email') or user.email
+#         address = request.POST.get('address')
+#         city = request.POST.get('city')
+#         phone = request.POST.get('phone') or user.phone_number
+#         payment_method = request.POST.get('payment_method')
+
+#         if not all([full_name, email, address, city, phone, payment_method]):
+#             messages.error(request, 'All fields are required.')
+#             return render(request, 'checkout.html', {
+#                 'cart': cart,
+#                 'cart_items': cart_items,
+#                 'total_price': total_price,
+#                 'cart_count': cart_count,
+#                 'user': user
+#             })
+
+#         # Save checkout data
+#         checkout = Checkout.objects.create(
+#             full_name=full_name,
+#             email=email,
+#             address=address,
+#             city=city,
+#             phone=phone,
+#             payment_method=payment_method,
+#             total=total_price
+#         )
+#         for item in cart_items:
+#             product_instance = item.product
+#             content_type = ContentType.objects.get_for_model(product_instance)
+#             CheckoutProduct.objects.create(
+#                 checkout=checkout,
+#                 content_type=content_type,
+#                 object_id=product_instance.pk,
+#                 quantity=item.quantity,
+#                 price=item.total_price()
+#             )
+
+
+#         cart.items.all().delete()
+#         cart.delete()
+
+#         # Order summary
+#         order_summary = "\n".join(
+#             f"{item.quantity} x {item.product.name } (₹{item.total_price()})"
+#             for item in cart_items
+#         )
+
+#         # Customer email
+#         customer_msg = f"""
+#         Dear {full_name},
+
+#         Thank you for your order!
+
+#         🛒 Order Summary:
+#         {order_summary}
+
+#         💰 Total Price: ₹{total_price}
+#         💳 Payment Method: {payment_method}
+
+#         📦 Delivery Address:
+#         {address}, {city}
+#         📞 Phone: {phone}
+
+#         We appreciate your business.
+#         ✅ Thank you and visit again!
+
+#         - The Team
+#         """
+
+#         # Send email to customer
+#         send_mail(
+#             subject="✅ Your Order Confirmation",
+#             message=customer_msg,
+#             from_email=settings.EMAIL_HOST_USER,
+#             recipient_list=[email],
+#             fail_silently=False
+#         )
+
+#         # Admin notification
+#         admin_msg = f"""
+#         New Order Received:
+
+#         Name: {full_name}
+#         Email: {email}
+#         Phone: {phone}
+#         Address: {address}, {city}
+#         Payment Method: {payment_method}
+
+#         Order Summary:
+#         {order_summary}
+
+#         Total Price: ₹{total_price}
+#         """
+
+#         send_mail(
+#             subject="📥 New Order Received",
+#             message=admin_msg,
+#             from_email=settings.EMAIL_HOST_USER,
+#             recipient_list=[settings.EMAIL_HOST_USER],
+#             fail_silently=False
+#         )
+
+#         messages.success(request, '✅ Order placed successfully. Confirmation sent!')
+#         return redirect('thankyou')
+
+#     context = {
+#         'cart': cart,
+#         'cart_items': cart_items,
+#         'total_price': total_price,
+#         'cart_count': cart_count,
+#         'user': user
+#     }
+#     return render(request, 'checkout.html', context)
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Checkout, CheckoutProduct, Cart
+from django.contrib.contenttypes.models import ContentType
+
 def checkout(request):
     user = request.user
     cart, created = Cart.objects.get_or_create(user=user)
     cart_items = cart.items.all()
-    
+
     cart_count = cart_items.count()
     total_price = sum(item.total_price() for item in cart_items)
 
@@ -312,7 +445,7 @@ def checkout(request):
                 'user': user
             })
 
-        # Save checkout data
+        # Save new checkout
         checkout = Checkout.objects.create(
             full_name=full_name,
             email=email,
@@ -322,6 +455,7 @@ def checkout(request):
             payment_method=payment_method,
             total=total_price
         )
+
         for item in cart_items:
             product_instance = item.product
             content_type = ContentType.objects.get_for_model(product_instance)
@@ -333,48 +467,49 @@ def checkout(request):
                 price=item.total_price()
             )
 
-
         cart.items.all().delete()
         cart.delete()
 
-        # Order summary
-        order_summary = "\n".join(
-            f"{item.quantity} x {item.product.name } (₹{item.total_price()})"
-            for item in cart_items
-        )
+        # Get all previous orders for this email
+        previous_orders = Checkout.objects.filter(email=email).order_by('-id')
 
-        # Customer email
+        # Build full order history for email
+        order_history_msg = ""
+        for order in previous_orders:
+            order_history_msg += f"\n🛒 Order #{order.id} - {order.order_status}\n"
+            for item in order.checkout_products.all():
+                order_history_msg += f" - {item.quantity} x {item.product.name} (₹{item.price})\n"
+            order_history_msg += f"Total: ₹{order.total}\n"
+
+        # Send customer email
         customer_msg = f"""
         Dear {full_name},
 
-        Thank you for your order!
-
-        🛒 Order Summary:
-        {order_summary}
-
-        💰 Total Price: ₹{total_price}
-        💳 Payment Method: {payment_method}
+        ✅ Your new order has been placed successfully!
 
         📦 Delivery Address:
         {address}, {city}
         📞 Phone: {phone}
+        💳 Payment: {payment_method}
 
-        We appreciate your business.
-        ✅ Thank you and visit again!
+        💰 Total Price: ₹{total_price}
 
+        📄 Order History:
+        {order_history_msg}
+
+        Thank you for shopping with us!
         - The Team
         """
 
-        # Send email to customer
         send_mail(
-            subject="✅ Your Order Confirmation",
+            subject="✅ Order Confirmation & History",
             message=customer_msg,
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email],
             fail_silently=False
         )
 
-        # Admin notification
+        # Admin email
         admin_msg = f"""
         New Order Received:
 
@@ -383,10 +518,6 @@ def checkout(request):
         Phone: {phone}
         Address: {address}, {city}
         Payment Method: {payment_method}
-
-        Order Summary:
-        {order_summary}
-
         Total Price: ₹{total_price}
         """
 
@@ -399,7 +530,7 @@ def checkout(request):
         )
 
         messages.success(request, '✅ Order placed successfully. Confirmation sent!')
-        return redirect('thankyou')
+        return redirect('order_complete')  # redirect to new thank-you page
 
     context = {
         'cart': cart,
@@ -409,6 +540,16 @@ def checkout(request):
         'user': user
     }
     return render(request, 'checkout.html', context)
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def order_complete(request):
+    email = request.user.email
+    previous_orders = Checkout.objects.filter(email=email).order_by('-id')
+    return render(request, 'ordercomplete.html', {'previous_orders': previous_orders})
+
+
 
 def contact_view(request):
     if request.method == 'POST':
@@ -580,3 +721,21 @@ def thankyou(request):
         'cart_count': cart_count,
     }
     return render(request, 'thankyou.html', context)
+
+def term_conditions(request):
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request, 'term.html', context)
+
+def privacypolicy(request):
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = CartItem.objects.filter(cart__user=request.user).count()
+    context = {
+        'cart_count': cart_count,
+    }
+    return render(request, 'privacypolicy.html', context)

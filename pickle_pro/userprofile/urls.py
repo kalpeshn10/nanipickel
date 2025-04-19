@@ -30,5 +30,7 @@ urlpatterns = [
     path('send_otp/',send_otp, name='send_otp'),
     path('verify_otp/',verify_otp, name='verify_otp'),
     path('reset_password/',reset_password, name='reset_password'),
-
+    path('ordercomplete/',order_complete, name='ordercomplete'),
+    path('term/',term_conditions, name='term'),
+    path('privacypolicy/',privacypolicy, name='privacypolicy'),
 ]

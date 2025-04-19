@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block main-content %}
+{% load static %}
+ 
+
+<h2>🎉 Order Confirmation</h2>
+<p>Thank you, {{ request.user.first_name }}! Your order has been placed.</p>
+
+<h3>📦 Your Orders</h3>
+{% for order in previous_orders %}
+    <div class="order-box">
+        <h4>Order #{{ order.id }} - Status: <strong>{{ order.order_status }}</strong></h4>
+        <ul>
+            {% for item in order.checkout_products.all %}
+                <li>{{ item.quantity }} x {{ item.product.name }} - ₹{{ item.price }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Total:</strong> ₹{{ order.total }}</p>
+    </div>
+{% empty %}
+    <p>No previous orders found.</p>
+{% endfor %}
+{% endblock main-content %}
