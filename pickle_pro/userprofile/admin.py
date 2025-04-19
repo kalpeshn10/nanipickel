@@ -11,4 +11,4 @@ admin.site.register(CarrotProduct)
 admin.site.register(ContactUs)
 admin.site.register(Cart)
 admin.site.register(CartItem)
-
+admin.site.register(CarouselImage)

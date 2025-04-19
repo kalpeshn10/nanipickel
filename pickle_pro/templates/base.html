@@ -29,7 +29,7 @@
    <nav class="navbar navbar-expand-lg mymenu co sticky-top bg-body-tertiary">
        <div class="container">
          <a class="navbar-brand" href="#">
-           <img src="{% static 'assets/images/maa_logo.png'%}" alt="">
+           <img src="{% static 'assets/images/aacharimaa2.png'%}" alt="">
          </a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -64,6 +64,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'blogs' %}">blogs</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'Contact' %}">Contact US</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'ordercomplete' %}">OrderCompete</a></li>
               </ul>
               {% comment %} <div class="search-container">
                   <input type="text" class="form-control search-input" placeholder="Search our store">
@@ -143,39 +144,23 @@ function addToCart() {
              <th>SHOP</th>
              <th>SHOP</th>
              <th>POLICIES</th>
-             {% comment %} <th>HELP</th> {% endcomment %}
            </tr>
          </thead>
          <tbody>
            <tr>
              <td><a class="dropdown-item" href="{% url 'mango' %}">Mango Pickle</a></td>
              <td><a class="dropdown-item" href="{% url 'Panjabi' %}">Panjabi Pickle</a></td>
-             <td>Terms and Conditions</td>
+             <td><a class="dropdown-item" href="{% url 'term' %}">Terms and Conditions</a></td>
             
            </tr>
            <tr>
              <td><a class="dropdown-item" href="{% url 'Lemon' %}">Lemon Pickle</a></td>
              <td><a class="dropdown-item" href="{% url 'kerda' %}">kerda  Pickle</a></td>
-             <td>Privacy Policy</td>
+             <td><a class="dropdown-item" href="{% url 'privacypolicy' %}">Privacy Policy</a></td>
            </tr>
            <tr>
              <td><a class="dropdown-item" href="{% url 'Mixed' %}">Mixed Pickle</a></td>
              <td><a class="dropdown-item" href="{% url 'Carrot' %}">Carrot Pickle</a></td>
-             <td></td>
-           </tr>
-           <tr>
-            
-             <td></td>
-             <td></td>
-           </tr>
-           <tr>
-             
-             <td></td>
-             <td></td>
-           </tr>
-           <tr>
-             
-             <td></td>
              <td></td>
            </tr>
          </tbody>
@@ -183,7 +168,7 @@ function addToCart() {
      </div>  
 
      <div class="col-lg-5 col-md-12 text-center mt-4 foot">
-       <img src="{% static 'assets/images/maa_2.png'%}" class="hvr-pulse-grow rounded" width="120px">
+       <img src="{% static 'assets/images/aacharimaa3.png'%}" class="hvr-pulse-grow rounded" width="120px">
        <p class="mt-3 mb-3"><b>FOLLOW US FOR ACHARIMAA</b></p>
        <ul class="list-inline">
         <li class="list-inline-item">

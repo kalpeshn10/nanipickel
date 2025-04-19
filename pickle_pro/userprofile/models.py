@@ -139,25 +139,15 @@ class CartItem(models.Model):
 
     def total_price(self):
         return (self.price or 0) * self.quantity 
-
-
-# class Checkout(models.Model):
-#     PAYMENT_CHOICES = [
-#         ('Cash On Delivery', 'Cash On Delivery'),
-#         ('PayPal', 'PayPal'),
-#     ]
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True,blank=True)
-#     full_name = models.CharField(max_length=100,null=True,blank=True)
-#     email = models.CharField(null=True,blank=True)
-#     mobile = models.CharField(max_length=100,null=True,blank=True)
-#     address = models.TextField(null=True,blank=True)
-#     city = models.CharField(max_length=100,null=True,blank=True)
-#     state = models.CharField(max_length=100,null=True,blank=True)
-#     zipcode = models.CharField(max_length=100,null=True,blank=True)
-#     payment_method = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default='Cash On Delivery',null=True,blank=True)
-#     total = models.DecimalField(max_digits=100, decimal_places=2,null=True,blank=True)
-#     product = models.ManyToManyField(Product)
     
+class CarouselImage(models.Model):
+    title = models.CharField(max_length=255, default='Unnamed')
+    image = models.ImageField(upload_to='static/assets/images') 
+    
+    def __str__(self):
+        return self.title
+
+
 class Checkout(models.Model):
     
     ORDER_STATUS = [
@@ -174,8 +164,8 @@ class Checkout(models.Model):
     email = models.EmailField(null=True,blank=True)
     address = models.TextField(null=True,blank=True)
     city = models.CharField(max_length=100,null=True,blank=True)
-    state = models.CharField(max_length=100,null=True,blank=True)
-    zip_code = models.CharField(max_length=100,null=True,blank=True)
+    # state = models.CharField(max_length=100,null=True,blank=True)
+    # zip_code = models.CharField(max_length=100,null=True,blank=True)
     payment_method = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default='Cash On Delivery',null=True,blank=True)
     total = models.DecimalField(max_digits=100, decimal_places=2,null=True,blank=True)
     phone = models.CharField(max_length=20,null=True,blank=True)
@@ -188,7 +178,7 @@ class CheckoutProduct(models.Model):
     object_id = models.PositiveIntegerField()
     product = GenericForeignKey('content_type', 'object_id')
 
-    quantity = models.PositiveIntegerField(default=1)  # Optional
+    quantity = models.PositiveIntegerField(default=1) 
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):

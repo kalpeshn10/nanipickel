@@ -60,7 +60,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .pad{
-	margin-left: 200px !important;
+	margin-left: 85px !important;
 }
 
 .pad li{
@@ -905,5 +905,51 @@ form button {
 	background-color: #de941e !important;
 	border: none !important;
 	color: #fff;
-	padding: 10px 244px;
+	padding: 10px 240px;
+}
+
+.contt {
+	background-image: url('../images/contact.jpg');
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	padding: 20px;
+	margin-top: 20px;
+	padding-top: 10px;
+}
+
+.padd{
+	margin-left: 10px!important;
+}
+
+.badge-status { 
+	padding: 5px 10px;
+	font-size: 0.85rem; 
+	border-radius: 20px; 
+}
+
+.highlight {
+	color: #6a2b0d;
+	font-weight: bold;
+}
+.section {
+padding: 60px 0;
+font-family: 'Segoe UI', sans-serif;
+}
+.image-box video {
+border-radius: 10px;
+width: 100%;
+height: 450px;
+}
+.text-block {
+padding: 20px;
+}
+.custom-text {
+color: #5c3a1a;
+font-size: 20px;
+text-align: justify;
+}
+
+.my .item{
+	height: 300px;
 }
