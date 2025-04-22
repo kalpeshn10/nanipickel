@@ -22,21 +22,9 @@
 </head>
 <body>
     <!------------ navbar start ------------>
-    {% comment %} <div class="container-fuild fixed-top">
+   <div class="container-fuild fixed-top">
      <marquee behavior="scroll" direction="left">Jars ₹999</strong> | Buy any <strong>4 Code: <strong>BUY@999</strong> | Extra <strong>5% OFF</strong> on <strong>Prepaid</strong> orders</marquee>
-   </div> {% endcomment %}
-   
-    <div class="container-fuild fixed-top ">
-        <div class="row justify-content-center align-items-center">
-          <div class="col-12 text-center">
-            <marquee behavior="scroll" direction="left">Jars ₹999</strong> | Buy any <strong>4 Code: <strong>BUY@999</strong> | Extra <strong>5% OFF</strong> on <strong>Prepaid</strong> orders</marquee>
-          </div>
-            <div class="col-12 text-center">
-              <P class="m-0">Welcome, {{ request.user.full_name }} </P>
-            </div>
-        </div>
-    </div>
-
+   </div> 
  
    <nav class="navbar navbar-expand-lg mymenu co sticky-top bg-body-tertiary">
        <div class="container">
@@ -71,7 +59,7 @@
                 <ul class="dropdown-menu subul" aria-labelledby="storyDropdown">
                     <li><a class="dropdown-item" href="{% url 'howwe' %}">How We</a></li>
                     <li><a class="dropdown-item" href="{% url 'makeour' %}">Make Our</a></li>
-                    <li><a class="dropdown-item" href="{% url 'products' %}">Products</a></li>
+                    <li><a class="dropdown-item" href="{% url 'recipes' %}">recipes</a></li>
                 </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'blogs' %}">blogs</a></li>
@@ -101,15 +89,15 @@
                 <button onclick="window.location.href='{% url 'cart' %}'" class="btn icon-button ma ab">
                   <i class="fas fa-shopping-cart"></i>
                   <div class="position-absolute text-dec">
-                <span class="cart-icon badge cart-count text-bg-danger text-dec rounded" onclick="goToCart()">
+                  <span class="cart-icon badge cart-count text-bg-danger text-dec rounded" onclick="goToCart()">
                   <span id="cart-count" class="cart-count">{{ cart_count }}</span>
-                </span></div>
+                  </span>
+                  </div>
                 </button>
               </div>
-            </div>
-            {% comment %} <div class="row">
-            <div class="col ">
-              <P class="m-0">Welcome, {{ request.user.full_name }} </P>
+              {% comment %} <div class="col my-3 position-relative">
+                <P class="tp">Welcome, {{ request.user.full_name }} </P>
+              </div>
             </div> {% endcomment %}
             </div>
             {% else %}
@@ -156,35 +144,36 @@ function addToCart() {
 <footer class="bg-light p-4">
  <div class="container text-center text-md-start">
    <div class="row">
-      <div class="col-lg-7 col-md-12">
-       <table class="table table-borderless text-center text-md-start mt-4">
-         <thead>
-           <tr>
-             <th>SHOP</th>
-             <th>SHOP</th>
-             <th>POLICIES</th>
-           </tr>
-         </thead>
-         <tbody>
-           <tr>
-             <td><a class="dropdown-item" href="{% url 'mango' %}">Mango Pickle</a></td>
-             <td><a class="dropdown-item" href="{% url 'Panjabi' %}">Panjabi Pickle</a></td>
-             <td><a class="dropdown-item" href="{% url 'term' %}">Terms and Conditions</a></td>
-            
-           </tr>
-           <tr>
-             <td><a class="dropdown-item" href="{% url 'Lemon' %}">Lemon Pickle</a></td>
-             <td><a class="dropdown-item" href="{% url 'kerda' %}">kerda  Pickle</a></td>
-             <td><a class="dropdown-item" href="{% url 'privacypolicy' %}">Privacy Policy</a></td>
-           </tr>
-           <tr>
-             <td><a class="dropdown-item" href="{% url 'Mixed' %}">Mixed Pickle</a></td>
-             <td><a class="dropdown-item" href="{% url 'Carrot' %}">Carrot Pickle</a></td>
-             <td></td>
-           </tr>
-         </tbody>
-       </table>
-     </div>  
+    <div class="col-lg-7 col-md-12 mt-4">
+      <div class="table-responsive">
+        <table class="table table-borderless text-center text-md-start">
+          <thead class="fw-bold text-uppercase">
+            <tr>
+              <th scope="col">Shop</th>
+              <th scope="col">Shop</th>
+              <th scope="col">Policies</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a class="dropdown-item" href="{% url 'mango' %}">Mango Pickle</a></td>
+              <td><a class="dropdown-item" href="{% url 'Panjabi' %}">Panjabi Pickle</a></td>
+              <td><a class="dropdown-item" href="{% url 'term' %}">Terms and Conditions</a></td>
+            </tr>
+            <tr>
+              <td><a class="dropdown-item" href="{% url 'Lemon' %}">Lemon Pickle</a></td>
+              <td><a class="dropdown-item" href="{% url 'kerda' %}">Kerda Pickle</a></td>
+              <td><a class="dropdown-item" href="{% url 'privacypolicy' %}">Privacy Policy</a></td>
+            </tr>
+            <tr>
+              <td><a class="dropdown-item" href="{% url 'Mixed' %}">Mixed Pickle</a></td>
+              <td><a class="dropdown-item" href="{% url 'Carrot' %}">Carrot Pickle</a></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> 
 
      <div class="col-lg-5 col-md-12 text-center mt-4 foot">
        <img src="{% static 'assets/images/aacharimaa3.png'%}" class="hvr-pulse-grow rounded" width="120px">

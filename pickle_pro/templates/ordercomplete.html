@@ -3,21 +3,100 @@
 {% load static %}
  
 
-<h2>🎉 Order Confirmation</h2>
-<p>Thank you, {{ request.user.first_name }}! Your order has been placed.</p>
+  <h2 class="mb-4 text-success text-center mt-4">🎉 Order Confirmation 🎉</h2>
+  <p class="lead text-center">Thank you, <strong><b>{{ request.user.full_name }}</b></strong> ! Your order has been placed.</p>
 
-<h3>📦 Your Orders</h3>
-{% for order in previous_orders %}
-    <div class="order-box">
-        <h4>Order #{{ order.id }} - Status: <strong>{{ order.order_status }}</strong></h4>
-        <ul>
+  <h2 class="mt-5 mb-4 ord text-center">📦 Your Orders 📦</h2>
+
+  {% for order in previous_orders %}
+    <div class="order-box tab">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3>Order : {{ order.id }}</h3>
+        <span class="badge bg-primary">Status: {{ order.order_status }}</span>
+      </div>
+
+      <div class="table-responsive ">
+        <table class="table table-bordered ">
+          <thead class="table-light text-center">
+            <tr>
+              <th class="ta">Product</th>
+              <th class="ta">Quantity</th>
+              <th class="ta">Price (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for item in order.checkout_products.all %}
-                <li>{{ item.quantity }} x {{ item.product.name }} - ₹{{ item.price }}</li>
+              <tr class="text-center">
+                <td class="taa">{{ item.product.name }}</td>
+                <td class="taa">{{ item.quantity }}</td>
+                <td class="taa">{{ item.price }}</td>
+              </tr>
             {% endfor %}
-        </ul>
-        <p><strong>Total:</strong> ₹{{ order.total }}</p>
+          </tbody>
+          <tfoot>
+            {% comment %} <tr>
+              <th colspan="3" class="text-center taa">Total: ₹{{ order.total }}</th>
+               <th class="taa"></th> 
+            </tr> {% endcomment %}
+          </tfoot>
+        </table>
+        <div class="d-flex justify-content-end align-items-center mb-2">
+            <h4 class="p-2">Total :</h4>
+            <h4 class="p-2" style="color: darkgreen;">
+                ₹ {{ order.total }}
+            </h4>
+          </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn checkout btn-lg"  onclick="printInvoice({{ order.id }})">🧾 Print Invoice</button>
+      </div>
+
+      
+
+      <div id="invoice-{{ order.id }}" class="invoice-section p-4">
+        <h4>Invoice - Order :{{ order.id }}</h4>
+        <p>Customer: {{ request.user.first_name }}</p>
+        <table class="table">
+          <thead>
+            <tr><th>Product</th><th>Quantity</th><th>Price</th></tr>
+          </thead>
+          <tbody>
+            {% for item in order.checkout_products.all %}
+              <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₹{{ item.price }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr><td colspan="2"><strong>Total:</strong></td><td>₹{{ order.total }}</td></tr>
+          </tfoot>
+        </table>
+        <p><strong>Status:</strong> {{ order.order_status }}</p>
+        <p><strong>Ordered on:</strong> {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+      </div>
     </div>
-{% empty %}
+  {% empty %}
     <p>No previous orders found.</p>
-{% endfor %}
+  {% endfor %}
+
+  {% comment %} <script>
+    function printInvoice(orderId) {
+      const invoiceSection = document.getElementById(`invoice-${orderId}`);
+      invoiceSection.style.display = 'block';
+      window.print();
+      invoiceSection.style.display = 'none';
+    }
+  </script> {% endcomment %}
+  <script>
+    function printInvoice(orderId) {
+        const url = `/invoice/${orderId}/`;
+        window.open(url, '_blank');
+    }
+  </script>
+
+    
+
 {% endblock main-content %}

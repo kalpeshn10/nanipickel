@@ -29,9 +29,21 @@
     
         <button type="submit" class="btn account w-100">Sign Up</button>
 
+        {% comment %} {% if signup_success %}
+        <script>
+            alert("Sign-up successful! Please log in.");
+            window.location.href = "{% url 'login' %}";
+        </script>
+        {% endif %} {% endcomment %}
+
         {% if signup_success %}
         <script>
             alert("Sign-up successful! Please log in.");
+            window.location.href = "{% url 'login' %}";
+        </script>
+        {% elif account_exists %}
+        <script>
+            alert("An account with this email already exists. Please log in.");
             window.location.href = "{% url 'login' %}";
         </script>
         {% endif %}

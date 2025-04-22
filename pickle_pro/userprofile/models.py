@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.utils import timezone
 class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
@@ -149,7 +150,6 @@ class CarouselImage(models.Model):
 
 
 class Checkout(models.Model):
-    
     ORDER_STATUS = [
         ('Shipped', 'Shipped'),
         ('On The Way', 'On The Way'),
@@ -170,10 +170,10 @@ class Checkout(models.Model):
     total = models.DecimalField(max_digits=100, decimal_places=2,null=True,blank=True)
     phone = models.CharField(max_length=20,null=True,blank=True)
     order_status = models.CharField(max_length=100, choices=ORDER_STATUS, default='Shipped',null=True,blank=True)
+    # created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True) 
     
 class CheckoutProduct(models.Model):
     checkout = models.ForeignKey(Checkout, on_delete=models.CASCADE, related_name='checkout_products')
-
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     product = GenericForeignKey('content_type', 'object_id')

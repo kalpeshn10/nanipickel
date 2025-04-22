@@ -17,7 +17,7 @@
         <div class="col-md-7">
             <div class="checkout-form" method="post">
             <h4 class="text-center mb-3">Billing Details</h4>
-            <form action="{% url 'checkout' %}" method="post">
+            <form id="checkoutForm" action="{% url 'checkout' %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="container-1 mt-1">
                     <h4>Contact</h4>
@@ -26,22 +26,26 @@
                         value="{{ user.email }}" required>
             
                     <h4>Delivery</h4>
+            
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
                         <input type="text" class="form-control" name="name" placeholder="Full Name"
                             value="{{ user.full_name }}" required>
                     </div>
+            
                     <div class="mb-3">
                         <label class="form-label">Address</label>
-                        <input type="text" class="form-control" name="address" placeholder="Address" required>
+                        <input type="text" id="address" class="form-control" name="address" placeholder="Address" required>
                     </div>
+            
                     <div class="mb-3">
                         <label class="form-label">City</label>
-                        <input type="text" class="form-control" name="city" placeholder="City" required>
+                        <input type="text" id="city" class="form-control" name="city" placeholder="City" required>
                     </div>
+            
                     <div class="mb-3">
                         <label class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" name="phone" placeholder="Phone"
+                        <input type="text" id="phone" class="form-control" name="phone" placeholder="Phone"
                             value="{{ user.phone_number }}" required>
                     </div>
                 </div>
@@ -52,23 +56,27 @@
                         <input type="radio" class="form-check-input" name="payment_method" value="Cash on Delivery" required>
                         <label class="form-check-label">Cash on Delivery</label>
                     </div>
-                    <div class="form-check">
+                    <div class="form-check mb-3">
                         <input type="radio" class="form-check-input" name="payment_method" value="UPI Payment" required>
                         <label class="form-check-label">UPI Payment</label>
                     </div>
                 </div>
             
+                <!-- Custom alert -->
+                <div id="formAlert" class="alert alert-danger d-none" role="alert">
+                    ⚠️ Please fill all required fields before placing the order.
+                </div>
+            
                 <div class="mt-2">
                     <div class="d-grid">
-                        <button type="submit" class="btn checkout" onclick="placeOrder()">Place Order</button>
+                        <button type="submit" class="btn checkout" id="placeOrderBtn">Place Order</button>
                     </div>
                 </div>
             </form>
-            
             </div>
         </div>
         
-        <div class="col-md-5">
+        {% comment %} <div class="col-md-5">
             <div class="cart-summary">
                 <h4 class="text-center mb-3">Order Summary</h4>
                 <ul class="list-group mb-3">
@@ -83,6 +91,23 @@
                 </ul>
                 <h2>Total: <strong style="color: green">&#8377; {{ total_price }}</strong></h2>
             </div>
+        </div> {% endcomment %}
+
+        <div class="col-md-5">
+            <div class="cart-summary">
+                <h4 class="text-center mb-3">Order Summary</h4>
+                <ul class="list-group mb-3" id="cartItemsList">
+                    {% for item in cart_items %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>{{ item.product.name }} ({{ item.quantity }})</span>
+                            <span>&#8377;{{ item.total_price }}</span>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-center text-muted empty-cart">Your cart is empty.</li>
+                    {% endfor %}
+                </ul>
+                <h2>Total: <strong style="color: green">&#8377; {{ total_price }}</strong></h2>
+            </div>
         </div>
 
     </div>
@@ -92,5 +117,29 @@
     function placeOrder() {
       window.location.href = "{% url 'thankyou' %}"; 
     }
+
+    document.getElementById("checkoutForm").addEventListener("submit", function(event) {
+        const address = document.getElementById("address").value.trim();
+        const city = document.getElementById("city").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const payment = document.querySelector('input[name="payment_method"]:checked');
+        const alertBox = document.getElementById("formAlert");
+
+        if (!address || !city || !phone || !payment) {
+            event.preventDefault(); // prevent form submission
+            alertBox.classList.remove("d-none"); // show alert
+        } else {
+            alertBox.classList.add("d-none"); // hide alert if all good
+        }
+    });
+
+    document.getElementById("placeOrderBtn").addEventListener("click", function(event) {
+        const isCartEmpty = document.querySelector(".empty-cart");
+
+        if (isCartEmpty) {
+            event.preventDefault(); // stop form submission
+            alert("🛒 Your cart is empty. Please choose a product before placing the order.");
+        }
+    });
   </script>
 {% endblock main-content %}

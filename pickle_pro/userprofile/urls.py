@@ -11,8 +11,8 @@ urlpatterns = [
     path('Carrot/',Carrot,name='Carrot'),
     path('howwe/',howwe,name='howwe'),
     path('makeour/',makeour,name='makeour'),
-    path('products/',products,name='products'),
     path('blogs/',blogs,name='blogs'),
+    path('recipes/',recipes,name='recipes'),
     path('Contact/',Contact,name='Contact'),
     path('createaccount/',createaccount,name='createaccount'),
     path('checkout/',checkout,name='checkout'),
@@ -33,4 +33,5 @@ urlpatterns = [
     path('ordercomplete/',order_complete, name='ordercomplete'),
     path('term/',term_conditions, name='term'),
     path('privacypolicy/',privacypolicy, name='privacypolicy'),
+    path('invoice/<int:order_id>/', invoice_view, name='invoice'),
 ]
